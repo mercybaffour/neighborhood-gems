@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  NeighborhoodGems
 //
-//  Created by David Baffour on 12/27/22.
+//  
 //
 
 import UIKit
