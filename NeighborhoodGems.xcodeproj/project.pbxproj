@@ -17,7 +17,14 @@
 		831062E0295BF46E008A7BA8 /* NGPlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062DF295BF46E008A7BA8 /* NGPlaceDetailViewController.swift */; };
 		831062E2295BF4D0008A7BA8 /* NGService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062E1295BF4D0008A7BA8 /* NGService.swift */; };
 		831062E4295BF4DD008A7BA8 /* NGDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062E3295BF4DD008A7BA8 /* NGDataManager.swift */; };
-		831062E8295C08A9008A7BA8 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062E7295C08A9008A7BA8 /* Place.swift */; };
+		831062E8295C08A9008A7BA8 /* NGPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062E7295C08A9008A7BA8 /* NGPlace.swift */; };
+		831062EF295CC6F0008A7BA8 /* NGEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062EE295CC6F0008A7BA8 /* NGEndpoint.swift */; };
+		831062F1295CC75C008A7BA8 /* NGEndpointCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062F0295CC75C008A7BA8 /* NGEndpointCases.swift */; };
+		831062F3295CD210008A7BA8 /* NGCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062F2295CD210008A7BA8 /* NGCategory.swift */; };
+		831062F5295CD254008A7BA8 /* NGLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062F4295CD254008A7BA8 /* NGLocation.swift */; };
+		831062F7295CD28F008A7BA8 /* NGGeocodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062F6295CD28F008A7BA8 /* NGGeocodes.swift */; };
+		831062F9295CD52E008A7BA8 /* NGIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062F8295CD52E008A7BA8 /* NGIcon.swift */; };
+		831062FB295D1D54008A7BA8 /* NGPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062FA295D1D54008A7BA8 /* NGPlaces.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,7 +41,14 @@
 		831062E1295BF4D0008A7BA8 /* NGService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGService.swift; sourceTree = "<group>"; };
 		831062E3295BF4DD008A7BA8 /* NGDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGDataManager.swift; sourceTree = "<group>"; };
 		831062E6295C0060008A7BA8 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		831062E7295C08A9008A7BA8 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
+		831062E7295C08A9008A7BA8 /* NGPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGPlace.swift; sourceTree = "<group>"; };
+		831062EE295CC6F0008A7BA8 /* NGEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGEndpoint.swift; sourceTree = "<group>"; };
+		831062F0295CC75C008A7BA8 /* NGEndpointCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGEndpointCases.swift; sourceTree = "<group>"; };
+		831062F2295CD210008A7BA8 /* NGCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGCategory.swift; sourceTree = "<group>"; };
+		831062F4295CD254008A7BA8 /* NGLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGLocation.swift; sourceTree = "<group>"; };
+		831062F6295CD28F008A7BA8 /* NGGeocodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGGeocodes.swift; sourceTree = "<group>"; };
+		831062F8295CD52E008A7BA8 /* NGIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGIcon.swift; sourceTree = "<group>"; };
+		831062FA295D1D54008A7BA8 /* NGPlaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGPlaces.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +82,8 @@
 			isa = PBXGroup;
 			children = (
 				831062D6295BF297008A7BA8 /* SupportingFiles */,
+				831062ED295CC447008A7BA8 /* Managers */,
+				831062D7295BF2AE008A7BA8 /* APIClient */,
 				831062D8295BF2BE008A7BA8 /* Models */,
 				831062D9295BF2C6008A7BA8 /* Controllers */,
 				831062D0295BF1D7008A7BA8 /* Info.plist */,
@@ -87,19 +103,25 @@
 			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
-		831062D7295BF2AE008A7BA8 /* Managers */ = {
+		831062D7295BF2AE008A7BA8 /* APIClient */ = {
 			isa = PBXGroup;
 			children = (
 				831062E1295BF4D0008A7BA8 /* NGService.swift */,
-				831062E3295BF4DD008A7BA8 /* NGDataManager.swift */,
+				831062EE295CC6F0008A7BA8 /* NGEndpoint.swift */,
+				831062F0295CC75C008A7BA8 /* NGEndpointCases.swift */,
 			);
-			path = Managers;
+			path = APIClient;
 			sourceTree = "<group>";
 		};
 		831062D8295BF2BE008A7BA8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				831062E7295C08A9008A7BA8 /* Place.swift */,
+				831062E7295C08A9008A7BA8 /* NGPlace.swift */,
+				831062FA295D1D54008A7BA8 /* NGPlaces.swift */,
+				831062F2295CD210008A7BA8 /* NGCategory.swift */,
+				831062F4295CD254008A7BA8 /* NGLocation.swift */,
+				831062F6295CD28F008A7BA8 /* NGGeocodes.swift */,
+				831062F8295CD52E008A7BA8 /* NGIcon.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -108,7 +130,6 @@
 			isa = PBXGroup;
 			children = (
 				831062DA295BF2D3008A7BA8 /* Core */,
-				831062D7295BF2AE008A7BA8 /* Managers */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -122,6 +143,14 @@
 				831062DF295BF46E008A7BA8 /* NGPlaceDetailViewController.swift */,
 			);
 			path = Core;
+			sourceTree = "<group>";
+		};
+		831062ED295CC447008A7BA8 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				831062E3295BF4DD008A7BA8 /* NGDataManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -194,15 +223,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				831062F1295CC75C008A7BA8 /* NGEndpointCases.swift in Sources */,
 				831062E4295BF4DD008A7BA8 /* NGDataManager.swift in Sources */,
+				831062EF295CC6F0008A7BA8 /* NGEndpoint.swift in Sources */,
 				831062E0295BF46E008A7BA8 /* NGPlaceDetailViewController.swift in Sources */,
 				831062C7295BF1D5008A7BA8 /* NGTabBarController.swift in Sources */,
 				831062DE295BF456008A7BA8 /* NGResultsListViewController.swift in Sources */,
+				831062FB295D1D54008A7BA8 /* NGPlaces.swift in Sources */,
+				831062F9295CD52E008A7BA8 /* NGIcon.swift in Sources */,
+				831062F5295CD254008A7BA8 /* NGLocation.swift in Sources */,
 				831062C3295BF1D5008A7BA8 /* AppDelegate.swift in Sources */,
 				831062C5295BF1D5008A7BA8 /* SceneDelegate.swift in Sources */,
-				831062E8295C08A9008A7BA8 /* Place.swift in Sources */,
+				831062E8295C08A9008A7BA8 /* NGPlace.swift in Sources */,
+				831062F7295CD28F008A7BA8 /* NGGeocodes.swift in Sources */,
 				831062E2295BF4D0008A7BA8 /* NGService.swift in Sources */,
 				831062DC295BF439008A7BA8 /* NGPlaceListViewController.swift in Sources */,
+				831062F3295CD210008A7BA8 /* NGCategory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
