@@ -30,6 +30,27 @@ class NGPlaceListViewController: UIViewController {
         return cv
     }()
     
+    private lazy var categorySearchField: UITextField = {
+        let textField = UITextField(frame: CGRect(x: 16, y: 125, width: screenWidth - 32, height: 40))
+        textField.backgroundColor = UIColor.init(red: 213.0/255.0, green: 207.0/255.0, blue: 207.0/255.0, alpha: 1)
+        textField.layer.masksToBounds = false
+        textField.attributedPlaceholder = NSAttributedString(string: "Search by Category", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
+        textField.layer.shadowRadius = 3.0
+        textField.layer.shadowColor = UIColor.init(red: 40.0/255.0, green: 40.0/255.0, blue: 40.0/255.0, alpha: 0.3).cgColor
+        textField.layer.shadowOffset = CGSize(width: 1, height: 2)
+        textField.layer.shadowOpacity = 1.0
+        textField.layer.cornerRadius = 8.0
+        let searchIcon = UIImageView.init(frame: CGRect.init(x: 10, y: 10, width: 20, height: 20))
+        searchIcon.image = UIImage.init(systemName: "magnifyingglass")
+        searchIcon.tintColor = .black
+        let leftView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: 40, height: 40))
+        leftView.backgroundColor = .clear
+        leftView.addSubview(searchIcon)
+        textField.leftView = leftView
+        textField.leftViewMode = .always
+        return textField
+    }()
+    
     // MARK: Lifecycle
 
     override func viewDidLoad() {
@@ -43,6 +64,10 @@ class NGPlaceListViewController: UIViewController {
 
 private extension NGPlaceListViewController {
     
+    var screenWidth : CGFloat {
+           return UIScreen.main.bounds.size.width
+    }
+    
     func setup() {
         
         navigationItem.title = "Explore"
@@ -50,10 +75,17 @@ private extension NGPlaceListViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         
+        self.view.addSubview(categorySearchField)
         self.view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            categorySearchField.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            categorySearchField.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            categorySearchField.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+        ])
+        
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: categorySearchField.bottomAnchor, constant: 6.0),
             collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
