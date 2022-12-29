@@ -9,6 +9,7 @@ import Foundation
 enum EndpointCases: Endpoint {
     //CASES
     case getPlaces
+    case getPlaceDetail
     
     //Endpoint Required Fields
     var apiKey: String {
@@ -18,14 +19,14 @@ enum EndpointCases: Endpoint {
     
     var httpMethod: String {
         switch self {
-        case .getPlaces:
+        case .getPlaces,.getPlaceDetail:
             return "GET"
         }
     }
     
     var baseURLString: String {
         switch self {
-        case .getPlaces:
+        case .getPlaces, .getPlaceDetail:
             return "https://api.foursquare.com/"
         }
     }
@@ -34,12 +35,14 @@ enum EndpointCases: Endpoint {
         switch self {
         case .getPlaces:
             return "v3/places/search"
+        case .getPlaceDetail:
+            return "v3/places"
         }
     }
     
     var headers: [String: Any]? {
         switch self {
-        case .getPlaces:
+        case .getPlaces, .getPlaceDetail:
             return ["Accept": "application/json",
                     "Authorization": apiKey
             ]
@@ -48,7 +51,7 @@ enum EndpointCases: Endpoint {
     
     var body: [String : Any]? {
         switch self {
-        case .getPlaces:
+        case .getPlaces, .getPlaceDetail:
             return [:]
         }
     }
