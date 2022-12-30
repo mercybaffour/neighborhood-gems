@@ -4,7 +4,13 @@
 <dict>
 	<key>API_KEY</key>
 	<string>$(API_KEY)</string>
-	<key>UIApplicationSceneManifest</key>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Do you allow this app to track your location always?</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Do you allow this app to track your location always?</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Do you allow this app to track your location while in use?</string>
+    <key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
 		<false/>

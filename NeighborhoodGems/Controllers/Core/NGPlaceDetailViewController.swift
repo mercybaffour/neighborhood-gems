@@ -11,8 +11,16 @@ import MapKit
 class NGPlaceDetailViewController: UIViewController {
 
     // MARK: Place Object Details
-    var placeId: String!
     private var place: NGPlace?
+    
+    init(place: NGPlace? = nil) {
+        super.init(nibName: nil, bundle: nil)
+        self.place = place!
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: UI
     private lazy var containerView: UIView = {
@@ -23,29 +31,34 @@ class NGPlaceDetailViewController: UIViewController {
     
     
     private lazy var imageView: UIImageView = {
-         let iv = UIImageView()
-         iv.contentMode = .scaleAspectFill
-         return iv
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFill
+        return iv
     }()
      
      
     private lazy var nameLabel: UILabel = {
-         let label = UILabel()
-         label.backgroundColor = .clear
-         label.textColor = .label
-         return label
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.textColor = .label
+        label.text = place!.name
+        return label
     }()
      
     private lazy var addressLabel: UILabel = {
-         let label = UILabel()
-         label.backgroundColor = .clear
-         label.textColor = .label
-         label.numberOfLines = 3
-         return label
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.textColor = .label
+        label.text = place!.location.formatted_address
+        label.numberOfLines = 3
+        return label
     }()
     
     private lazy var mapView: MKMapView = {
         let mv = MKMapView()
+        let center = CLLocationCoordinate2D(latitude: place!.geocodes.main.latitude, longitude: place!.geocodes.main.longitude)
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+        mv.setRegion(region, animated: true)
         return mv
     }()
     
@@ -111,7 +124,7 @@ private extension NGPlaceDetailViewController {
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
-            imageView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            imageView.topAnchor.constraint(equalTo: mapView.bottomAnchor),
             imageView.heightAnchor.constraint(equalToConstant: Constants.imageHeight)
         ])
 

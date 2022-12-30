@@ -36,7 +36,7 @@ enum EndpointCases: Endpoint {
         case .getPlaces:
             return "v3/places/search"
         case .getPlaceDetail:
-            return "v3/places"
+            return "v3/places/"
         }
     }
     

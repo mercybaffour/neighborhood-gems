@@ -6,16 +6,20 @@
 //
 
 import UIKit
+import CoreLocation
 
-class NGPlaceListViewController: UIViewController {
+class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
 
+    //MARK: Management
     //Provides data to populate our grid view
     var dataSource: [NGPlace] {
         return NGDataManager.shared.placesList
     }
     
-    // MARK: - UI
+    //To manage current location
+    let locationManager = CLLocationManager()
     
+    // MARK: - UI
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -28,6 +32,13 @@ class NGPlaceListViewController: UIViewController {
         cv.backgroundColor = .clear
         cv.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         return cv
+    }()
+    
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Explore"
+        label.textColor = .white
+        return label
     }()
     
     private lazy var categorySearchField: UITextField = {
@@ -54,49 +65,75 @@ class NGPlaceListViewController: UIViewController {
     }()
     
     // MARK: Lifecycle
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
-        loadData()
+        setupLocation()
+        setupViews()
     }
     
     
 }
 
-private extension NGPlaceListViewController {
+extension NGPlaceListViewController {
     
     var screenWidth : CGFloat {
            return UIScreen.main.bounds.size.width
     }
     
-    private func setup() {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         
-        navigationItem.title = "Explore"
+        let lat_long = "\(locValue.latitude),\(locValue.longitude)"
+        
+        loadData(ll: lat_long)
+    }
+    
+    private func setupLocation() {
+        DispatchQueue.global().async {
+            if CLLocationManager.locationServicesEnabled() {
+                self.locationManager.requestAlwaysAuthorization()
+                self.locationManager.requestWhenInUseAuthorization()
+                
+                self.locationManager.delegate = self
+                self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+                self.locationManager.startUpdatingLocation()
+            }
+        }
+    }
+    
+    private func setupViews() {
         
         collectionView.delegate = self
         collectionView.dataSource = self
         
+        
+        self.view.addSubview(titleLabel)
         self.view.addSubview(categorySearchField)
         self.view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            categorySearchField.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            titleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+        ])
+        
+        NSLayoutConstraint.activate([
+            categorySearchField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             categorySearchField.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
             categorySearchField.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
         ])
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: categorySearchField.bottomAnchor, constant: 6.0),
+            collectionView.topAnchor.constraint(equalTo: categorySearchField.bottomAnchor, constant: 16.0),
             collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
         ])
     }
     
-    //Calling service method to fetch places list by providing search terms
-    private func loadData() {
-        NGService.getPlacesList(term: "coffee", city: "Philadelphia") { (success, list) in
+    //Calling service method to fetch places based on current location
+    private func loadData(ll: String) {
+        NGService.getPlacesList(term: "art", ll: ll) { (success, list) in
             
             if success, let list = list {
                 NGDataManager.shared.placesList = list
@@ -108,7 +145,7 @@ private extension NGPlaceListViewController {
             }
             else {
                 // show no data alert
-                self.displayNoDataAlert(title: "We apologize...",message: "No places to display =(")
+                self.displayNoDataAlert(title: "We apologize...", message: "No places to display =(")
             }
             
         }
@@ -143,32 +180,39 @@ extension NGPlaceListViewController: UICollectionViewDataSource {
         let place = dataSource[indexPath.item]
         cell.populate(with: place)
         
+        let photoImage = UIImage(named: "mountainsilhouette.jpeg")
+        cell.setImage(image: photoImage)
         
         
-        if let imageURL = URL(string: place.categories[0].icon.url) {
-            NGService.getImage(imageUrl: imageURL, completion: { (success, imageData) in
-                if success, let imageData = imageData,
-                    let icon = UIImage(data: imageData) {
-                    DispatchQueue.main.async {
-                        cell.setImage(image: icon)
-                    }
+        /*let imageURL = "https://api.foursquare.com/v3/places/\(place.fsq_id)/photos"
+        NGService.getImage(imageUrl: imageURL, completion: { (success, imageData) in
+            print("I'm in cell for item at")
+            if success, let imageData = imageData,
+                let photo = UIImage(data: imageData) {
+                DispatchQueue.main.async {
+                    cell.setImage(image: photo)
                 }
-            })
-        }
+            }
+        })
+         */
+        
         
         return cell
     }
     
 }
 
+
 //Upon cell selection, api call to fetch place details
 extension NGPlaceListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ListCollectionViewCell
+        
         let place = dataSource[indexPath.item]
         cell.loadPlaceDetail(with: place)
         
-       
+        navigationController?.pushViewController(NGPlaceDetailViewController(place: place), animated: true)
+        
         print("Tapped on \(cell.id) on item \(indexPath.row)")
     }
     
@@ -191,16 +235,17 @@ extension NGPlaceListViewController: UICollectionViewDelegateFlowLayout {
     
 }
 
+
 //Cell Prototype
 class ListCollectionViewCell: UICollectionViewCell {
     enum Constants {
         static let contentViewCornerRadius: CGFloat = 4.0
 
-        static let imageHeight: CGFloat = 180.0
+        static let imageHeight: CGFloat = 100.0
 
         static let verticalSpacing: CGFloat = 8.0
         static let horizontalPadding: CGFloat = 16.0
-        static let placeVerticalPadding: CGFloat = 8.0
+        static let placeVerticalPadding: CGFloat = 80.0
     }
     
     var id: String = {

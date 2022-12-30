@@ -8,7 +8,7 @@ import Foundation
 
 struct NGGeocodes: Codable {
     let main: NGMain
-    let roof: NGRoof
+    let roof: NGRoof?
 }
 
 struct NGMain: Codable {
