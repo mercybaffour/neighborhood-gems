@@ -19,7 +19,7 @@ enum EndpointCases: Endpoint {
     
     var httpMethod: String {
         switch self {
-        case .getPlaces,.getPlaceDetail:
+        case .getPlaces, .getPlaceDetail:
             return "GET"
         }
     }

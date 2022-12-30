@@ -34,7 +34,7 @@ class NGPlaceListViewController: UIViewController {
         let textField = UITextField(frame: CGRect(x: 16, y: 125, width: screenWidth - 32, height: 40))
         textField.backgroundColor = UIColor.init(red: 213.0/255.0, green: 207.0/255.0, blue: 207.0/255.0, alpha: 1)
         textField.layer.masksToBounds = false
-        textField.attributedPlaceholder = NSAttributedString(string: "Search by Category", attributes: [NSAttributedString.Key.foregroundColor: UIColor.red])
+        textField.attributedPlaceholder = NSAttributedString(string: "Search by Category", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
         textField.layer.shadowRadius = 3.0
         textField.layer.shadowColor = UIColor.init(red: 40.0/255.0, green: 40.0/255.0, blue: 40.0/255.0, alpha: 0.3).cgColor
         textField.layer.shadowOffset = CGSize(width: 1, height: 2)
@@ -43,6 +43,8 @@ class NGPlaceListViewController: UIViewController {
         let searchIcon = UIImageView.init(frame: CGRect.init(x: 10, y: 10, width: 20, height: 20))
         searchIcon.image = UIImage.init(systemName: "magnifyingglass")
         searchIcon.tintColor = .black
+        searchIcon.layer.cornerRadius = 8.0
+        searchIcon.backgroundColor = .yellow
         let leftView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: 40, height: 40))
         leftView.backgroundColor = .clear
         leftView.addSubview(searchIcon)
@@ -68,7 +70,7 @@ private extension NGPlaceListViewController {
            return UIScreen.main.bounds.size.width
     }
     
-    func setup() {
+    private func setup() {
         
         navigationItem.title = "Explore"
         
@@ -93,7 +95,7 @@ private extension NGPlaceListViewController {
     }
     
     //Calling service method to fetch places list by providing search terms
-    func loadData() {
+    private func loadData() {
         NGService.getPlacesList(term: "coffee", city: "Philadelphia") { (success, list) in
             
             if success, let list = list {
@@ -113,7 +115,7 @@ private extension NGPlaceListViewController {
     }
     
     
-    func displayNoDataAlert(title: String?, message: String?) {
+    private func displayNoDataAlert(title: String?, message: String?) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         let dismissAction = UIAlertAction(title: "Okay", style: .cancel, handler: { (action) -> Void in
@@ -159,6 +161,7 @@ extension NGPlaceListViewController: UICollectionViewDataSource {
     
 }
 
+//Upon cell selection, api call to fetch place details
 extension NGPlaceListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ListCollectionViewCell
@@ -205,21 +208,21 @@ class ListCollectionViewCell: UICollectionViewCell {
         return String(id)
     }()
     
-    private let imageView: UIImageView = {
+    private lazy var imageView: UIImageView = {
          let iv = UIImageView()
          iv.contentMode = .scaleAspectFill
          return iv
     }()
      
      
-    private let nameLabel: UILabel = {
+    private lazy var nameLabel: UILabel = {
          let label = UILabel()
          label.backgroundColor = .clear
          label.textColor = .label
          return label
     }()
      
-    private let addressLabel: UILabel = {
+    private lazy var addressLabel: UILabel = {
          let label = UILabel()
          label.backgroundColor = .clear
          label.textColor = .label

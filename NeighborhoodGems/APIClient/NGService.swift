@@ -46,9 +46,10 @@ class NGService {
     
     //Request method for getPlaces endpoint
     static func getPlacesList(term: String, city: String, completion: @escaping (Bool, [NGPlace]?) -> Void) {
+        let session = URLSession(configuration: .default)
         let request = createSearchRequest(term: term, city: city)
         
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        let task = session.dataTask(with: request) { data, response, error in
             guard
                 let data = data,                              // data?
                 let response = response as? HTTPURLResponse,  // HTTP response?
@@ -77,17 +78,19 @@ class NGService {
     
     //Request method for getPlaceDetail endpoint
     static func getPlaceDetail(id: String, completion: @escaping (Bool, NGPlace?) -> Void) {
+        let session = URLSession(configuration: .default)
         let request = createPlaceDetailRequest(id: id)
         
-        //print(request)
+        print(request)
         
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        let task = session.dataTask(with: request) { data, response, error in
             guard
                 let data = data,                              // data?
                 let response = response as? HTTPURLResponse,  // HTTP response?
                 200 ..< 300 ~= response.statusCode,           // status code range in 2xx?
                 error == nil                                  // no error?
             else {
+                print("stuck in data task")
                 completion(false, nil)
                 return
             }

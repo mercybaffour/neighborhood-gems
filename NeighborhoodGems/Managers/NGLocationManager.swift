@@ -1,0 +1,5 @@
+//
+//  NGLocationManager.swift
+//  NeighborhoodGems
+//
+//
