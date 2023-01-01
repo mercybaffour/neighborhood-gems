@@ -6,7 +6,7 @@
 
 import Foundation
 
-protocol Endpoint {
+protocol NGEndpoint {
     var httpMethod: String { get }
     var baseURLString: String { get }
     var path: String { get }
@@ -14,7 +14,7 @@ protocol Endpoint {
     var body: [String: Any]? { get }
 }
 
-extension Endpoint {
+extension NGEndpoint {
     // a default extension that creates the full URL
     var url: String {
         return baseURLString + path

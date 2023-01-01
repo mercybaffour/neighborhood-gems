@@ -2,7 +2,6 @@
 //  NGDiscoverViewController.swift
 //  NeighborhoodGems
 //
-//  Created by David Baffour on 12/30/22.
 //
 
 import UIKit

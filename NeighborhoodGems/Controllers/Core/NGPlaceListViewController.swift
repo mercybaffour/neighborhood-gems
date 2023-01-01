@@ -12,11 +12,10 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
 
     //MARK: Management
     //Provides data to populate our grid view
-    var dataSource: [NGPlace] {
+    var placeDataSource: [NGPlace] {
         return NGDataManager.shared.placesList
     }
     
-    //To manage current location
     let locationManager = CLLocationManager()
     
     // MARK: - UI
@@ -138,7 +137,6 @@ extension NGPlaceListViewController {
             if success, let list = list {
                 NGDataManager.shared.placesList = list
                 
-                //Code to be exected on the main thread asynchronously
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
@@ -151,6 +149,26 @@ extension NGPlaceListViewController {
         }
     }
     
+    //Calling service method to fetch place tips
+    func loadPlaceDetail(with place: NGPlace) {
+        NGService.getPlaceTips(id: place.fsq_id) { (success, response) in
+            
+            if success, let response = response {
+                NGDataManager.shared.placeTips = response
+                
+                DispatchQueue.main.async {
+                    self.navigationController?.pushViewController(NGPlaceDetailViewController(place: place, tips: NGDataManager.shared.placeTips), animated: true)
+                }
+            }
+            else {
+                
+                // show no data alert
+                self.displayNoDataAlert(title: "We apologize...", message: "No places to display =(")
+                
+            }
+            
+        }
+    }
     
     private func displayNoDataAlert(title: String?, message: String?) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -171,13 +189,13 @@ extension NGPlaceListViewController: UICollectionViewDataSource {
     
     //How many items/cells to display
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource.count
+        return placeDataSource.count
     }
     
     //Returns a new cell with customizations
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ListCollectionViewCell
-        let place = dataSource[indexPath.item]
+        let place = placeDataSource[indexPath.item]
         cell.populate(with: place)
         
         let photoImage = UIImage(named: "mountainsilhouette.jpeg")
@@ -206,14 +224,11 @@ extension NGPlaceListViewController: UICollectionViewDataSource {
 //Upon cell selection, api call to fetch place details
 extension NGPlaceListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ListCollectionViewCell
         
-        let place = dataSource[indexPath.item]
-        cell.loadPlaceDetail(with: place)
+        //Making API Call to retrieve place detail for this unique cell item
+        let place = placeDataSource[indexPath.item]
+        self.loadPlaceDetail(with: place)
         
-        navigationController?.pushViewController(NGPlaceDetailViewController(place: place), animated: true)
-        
-        print("Tapped on \(cell.id) on item \(indexPath.row)")
     }
     
 }
@@ -248,10 +263,12 @@ class ListCollectionViewCell: UICollectionViewCell {
         static let placeVerticalPadding: CGFloat = 80.0
     }
     
+    
     var id: String = {
         let id = Int.random(in: 1...10)
         return String(id)
     }()
+     
     
     private lazy var imageView: UIImageView = {
          let iv = UIImageView()
@@ -295,26 +312,6 @@ class ListCollectionViewCell: UICollectionViewCell {
          imageView.image = image
     }
     
-    //Calling service method to fetch place detail by providing search terms
-    func loadPlaceDetail(with place: NGPlace) {
-        NGService.getPlaceDetail(id: place.fsq_id) { (success, response) in
-            
-            if success, let response = response {
-                NGDataManager.shared.placeDetail = response
-                
-                DispatchQueue.main.async{
-                    print(NGDataManager.shared.placeDetail)
-                }
-                
-            }
-            else {
-                // show no data alert
-               print("No data")
-            }
-            
-        }
-    }
-     
     
     private func setupViews() {
         contentView.clipsToBounds = true
@@ -356,6 +353,5 @@ class ListCollectionViewCell: UICollectionViewCell {
 
     }
 
- 
  }
  

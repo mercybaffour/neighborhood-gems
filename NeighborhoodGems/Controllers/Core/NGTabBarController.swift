@@ -20,6 +20,7 @@ class NGTabBarController: UITabBarController {
         //create instances of view controllers to be attached later
         let placeListVC = NGPlaceListViewController()
         let discoverVC = NGDiscoverViewController()
+
     
 
         let nav1 = UINavigationController(rootViewController: placeListVC)

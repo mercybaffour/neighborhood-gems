@@ -25,6 +25,7 @@
 		831062F7295CD28F008A7BA8 /* NGGeocodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062F6295CD28F008A7BA8 /* NGGeocodes.swift */; };
 		831062F9295CD52E008A7BA8 /* NGIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062F8295CD52E008A7BA8 /* NGIcon.swift */; };
 		831062FB295D1D54008A7BA8 /* NGPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062FA295D1D54008A7BA8 /* NGPlaces.swift */; };
+		8359DC7E2961E53300C6E14F /* NGPlaceTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8359DC7D2961E53300C6E14F /* NGPlaceTip.swift */; };
 		83EAE93F295F413F0059FE10 /* NGDiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EAE93E295F413F0059FE10 /* NGDiscoverViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +51,7 @@
 		831062F6295CD28F008A7BA8 /* NGGeocodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGGeocodes.swift; sourceTree = "<group>"; };
 		831062F8295CD52E008A7BA8 /* NGIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGIcon.swift; sourceTree = "<group>"; };
 		831062FA295D1D54008A7BA8 /* NGPlaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGPlaces.swift; sourceTree = "<group>"; };
+		8359DC7D2961E53300C6E14F /* NGPlaceTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGPlaceTip.swift; sourceTree = "<group>"; };
 		83EAE93E295F413F0059FE10 /* NGDiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGDiscoverViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -124,6 +126,7 @@
 				831062F4295CD254008A7BA8 /* NGLocation.swift */,
 				831062F6295CD28F008A7BA8 /* NGGeocodes.swift */,
 				831062F8295CD52E008A7BA8 /* NGIcon.swift */,
+				8359DC7D2961E53300C6E14F /* NGPlaceTip.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 				831062C5295BF1D5008A7BA8 /* SceneDelegate.swift in Sources */,
 				831062E8295C08A9008A7BA8 /* NGPlace.swift in Sources */,
 				831062F7295CD28F008A7BA8 /* NGGeocodes.swift in Sources */,
+				8359DC7E2961E53300C6E14F /* NGPlaceTip.swift in Sources */,
 				831062E2295BF4D0008A7BA8 /* NGService.swift in Sources */,
 				831062DC295BF439008A7BA8 /* NGPlaceListViewController.swift in Sources */,
 				831062F3295CD210008A7BA8 /* NGCategory.swift in Sources */,

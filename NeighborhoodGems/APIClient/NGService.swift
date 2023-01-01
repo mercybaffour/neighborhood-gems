@@ -10,7 +10,7 @@ import Foundation
 class NGService {
     
     //Creating general base request
-    private static func createRequest(endpoint: Endpoint, params: [String: String]? = nil, id: String? = nil) -> URLRequest {
+    private static func createRequest(endpoint: NGEndpointCases, params: [String: String]? = nil, id: String? = nil) -> URLRequest {
         //URL
         var components = URLComponents(string: endpoint.url)!
         
@@ -18,10 +18,15 @@ class NGService {
             components.queryItems = parameters.map { (key, value) in URLQueryItem(name: key, value: value)}
         }
         
+        //If endpoint has required path params
         if let id = id {
             components.path += id
+            
+            if endpoint == .getPlaceTips {
+                components.path += "/tips"
+            }
         }
-        
+
         //Percent encoding
         components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
@@ -41,13 +46,13 @@ class NGService {
     //Creating Places Endpoint request with specified parameters
     private static func createSearchRequest(term: String, ll: String) -> URLRequest {
         let params = ["query": term, "ll": ll, "open_now": "true", "sort": "DISTANCE", "limit": "5"]
-        let userEndpoint = EndpointCases.getPlaces
+        let userEndpoint = NGEndpointCases.getPlaces
         return createRequest(endpoint: userEndpoint, params: params)
     }
     
-    //Creating Place Detail Endpoint request with specified parameters
-    private static func createPlaceDetailRequest(id: String) -> URLRequest {
-        let userEndpoint = EndpointCases.getPlaceDetail
+    //Creating Place Tips Endpoint request with specified parameters
+    private static func createPlaceTipsRequest(id: String) -> URLRequest {
+        let userEndpoint = NGEndpointCases.getPlaceTips
         return createRequest(endpoint: userEndpoint, id: id)
     }
     
@@ -85,12 +90,11 @@ class NGService {
         task.resume()
     }
     
-    //Request method for getPlaceDetail endpoint
-    static func getPlaceDetail(id: String, completion: @escaping (Bool, NGPlace?) -> Void) {
+    
+    //Request method for getPlaceTips endpoint
+    static func getPlaceTips(id: String, completion: @escaping (Bool, [NGPlaceTip]?) -> Void) {
         let session = URLSession(configuration: .default)
-        let request = createPlaceDetailRequest(id: id)
-        
-        print(request)
+        let request = createPlaceTipsRequest(id: id)
         
         let task = session.dataTask(with: request) { data, response, error in
             guard
@@ -99,7 +103,6 @@ class NGService {
                 200 ..< 300 ~= response.statusCode,           // status code range in 2xx?
                 error == nil                                  // no error?
             else {
-                print("stuck in data task")
                 completion(false, nil)
                 return
             }
@@ -107,17 +110,18 @@ class NGService {
             
             do {
                 let jsonDecoder = JSONDecoder()
-                let response = try jsonDecoder.decode(NGPlace.self, from: data)
-                //Means we have successfully received a response
-                completion(true, response)
+                let decodedResponse = try jsonDecoder.decode([NGPlaceTip].self, from: data)
+                //Means we have successfully collected all data objects into a list
+                completion(true, decodedResponse)
             } catch let jsonError {
                 print(jsonError)
             }
             
-            
+          
         }
         task.resume()
     }
+    
     
     //Requesting, then serving actual images
     static func getImage(imageUrl: String, completion: @escaping (Bool, Data?) -> Void) {

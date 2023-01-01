@@ -13,9 +13,12 @@ class NGPlaceDetailViewController: UIViewController {
     // MARK: Place Object Details
     private var place: NGPlace?
     
-    init(place: NGPlace? = nil) {
+    private var tips: [NGPlaceTip]?
+    
+    init(place: NGPlace? = nil, tips: [NGPlaceTip]? = nil) {
         super.init(nibName: nil, bundle: nil)
         self.place = place!
+        self.tips = tips!
     }
     
     required init?(coder: NSCoder) {
@@ -53,6 +56,23 @@ class NGPlaceDetailViewController: UIViewController {
         label.numberOfLines = 3
         return label
     }()
+    
+    private lazy var tipsLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.textColor = .label
+        
+        //Assigning label text with ALL tips
+        var tipsStr = ""
+        for tip in tips! {
+            tipsStr += "\(tip.text) \n"
+        }
+        label.text = tipsStr
+        
+        label.numberOfLines = 3
+        return label
+    }()
+    
     
     private lazy var mapView: MKMapView = {
         let mv = MKMapView()
@@ -93,6 +113,7 @@ private extension NGPlaceDetailViewController {
         containerView.addSubview(imageView)
         containerView.addSubview(nameLabel)
         containerView.addSubview(addressLabel)
+        containerView.addSubview(tipsLabel)
         
     
     }
@@ -102,6 +123,7 @@ private extension NGPlaceDetailViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         addressLabel.translatesAutoresizingMaskIntoConstraints = false
+        tipsLabel.translatesAutoresizingMaskIntoConstraints = false
         mapView.translatesAutoresizingMaskIntoConstraints = false
         
         // Layout constraints for container
@@ -142,6 +164,12 @@ private extension NGPlaceDetailViewController {
             addressLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 6.0)
         ])
         
+        // Layout constraints for tipsLabel
+        NSLayoutConstraint.activate([
+            tipsLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.horizontalPadding),
+            tipsLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.horizontalPadding),
+            tipsLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 16.0)
+        ])
     }
 }
 
