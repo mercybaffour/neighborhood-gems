@@ -14,6 +14,6 @@ struct NGPlace: Codable {
     let link: String
     let location: NGLocation
     let name: String
-    let timezone: String
+    let timezone: String?
     
 }

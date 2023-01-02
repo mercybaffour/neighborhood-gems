@@ -21,6 +21,12 @@ class NGDataManager {
         return list
     } ()
     
+    lazy var searchResultsList: [NGPlace] = {
+        //Placeholder Data
+        var list = [NGPlace]()
+            
+        return list
+    } ()
     
     lazy var placeTips: [NGPlaceTip]? = {
         var list = [NGPlaceTip]()

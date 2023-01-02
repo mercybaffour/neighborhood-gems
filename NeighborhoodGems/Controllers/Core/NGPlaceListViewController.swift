@@ -16,10 +16,10 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
         return NGDataManager.shared.placesList
     }
     
-    
     let locationManager = CLLocationManager()
     
     var lat_long = ""
+    
     
     // MARK: - UI
     private lazy var layout: UICollectionViewFlowLayout = {
@@ -39,16 +39,19 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Explore"
+        label.font = UIFont(name: "Futura", size: 32.0)
+        label.textAlignment = .center
+        label.text = "explore"
         label.textColor = .white
         return label
     }()
     
     private lazy var categorySearchField: UITextField = {
-        let textField = UITextField(frame: CGRect(x: 16, y: 125, width: screenWidth - 32, height: 40))
+        var textField = UITextField(frame: CGRect(x: 16, y: 200, width: screenWidth - 32, height: 40))
         textField.backgroundColor = UIColor.init(red: 213.0/255.0, green: 207.0/255.0, blue: 207.0/255.0, alpha: 1)
         textField.layer.masksToBounds = false
         textField.attributedPlaceholder = NSAttributedString(string: "Search By Category", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        textField.font = UIFont(name: "Futura", size: 18)
         textField.layer.shadowRadius = 3.0
         textField.layer.shadowColor = UIColor.init(red: 40.0/255.0, green: 40.0/255.0, blue: 40.0/255.0, alpha: 0.3).cgColor
         textField.layer.shadowOffset = CGSize(width: 1, height: 2)
@@ -67,11 +70,12 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
     }()
     
     private lazy var citySearchField: UITextField = {
-        let textField = UITextField(frame: CGRect(x: 16, y: 125, width: screenWidth - 32, height: 120))
+        var textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.backgroundColor = UIColor.init(red: 213.0/255.0, green: 207.0/255.0, blue: 207.0/255.0, alpha: 1)
         textField.layer.masksToBounds = false
         textField.attributedPlaceholder = NSAttributedString(string: "Enter City Destination", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        textField.font = UIFont(name: "Futura", size: 18)
         textField.layer.shadowRadius = 3.0
         textField.layer.shadowColor = UIColor.init(red: 40.0/255.0, green: 40.0/255.0, blue: 40.0/255.0, alpha: 0.3).cgColor
         textField.layer.shadowOffset = CGSize(width: 1, height: 2)
@@ -90,7 +94,7 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
     }()
     
     private lazy var submitBtn: UIButton = {
-        let btn = UIButton(frame: CGRect(x: 16, y: 125, width: screenWidth - 32, height: 40))
+        let btn = UIButton()
         btn.layer.masksToBounds = false
         btn.translatesAutoresizingMaskIntoConstraints = false
         btn.backgroundColor = .systemOrange
@@ -107,6 +111,7 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
         super.viewDidLoad()
         setupLocation()
         setupViews()
+        clearInputs()
        
     }
     
@@ -116,15 +121,17 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
 extension NGPlaceListViewController {
     
     var screenWidth : CGFloat {
-           return UIScreen.main.bounds.size.width
+        return UIScreen.main.bounds.size.width
     }
-    
+
     @objc func buttonPressed(sender: UIButton!) {
         let categorySearchInput = categorySearchField.text
         let citySearchInput = citySearchField.text
         print("Button pressed, input: \(String(describing: categorySearchInput)), \(String(describing: citySearchInput))")
         
         loadUserResults(term: categorySearchInput!, city: citySearchInput!)
+
+       
     }
     
     
@@ -158,7 +165,6 @@ extension NGPlaceListViewController {
         collectionView.dataSource = self
         
         
-        
         self.view.addSubview(titleLabel)
         self.view.addSubview(categorySearchField)
         self.view.addSubview(citySearchField)
@@ -170,13 +176,14 @@ extension NGPlaceListViewController {
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
         ])
          
         
         NSLayoutConstraint.activate([
-            categorySearchField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            categorySearchField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16.0),
             categorySearchField.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             categorySearchField.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
         ])
@@ -201,8 +208,17 @@ extension NGPlaceListViewController {
         ])
     }
     
+    func clearInputs() {
+        for view in self.view.subviews {
+            //Get All Values
+            if let textField = view as? UITextField {
+                textField.text = ""
+            }
+        }
+    }
+    
     //Calling service method to fetch places based on current location
-   func loadData(ll: String) {
+    func loadData(ll: String) {
         NGService.getPlacesList(term: "art", ll: ll) { (success, list) in
             
             if success, let list = list {
@@ -211,8 +227,7 @@ extension NGPlaceListViewController {
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
-            }
-            else {
+            } else {
                 // show no data alert
                 self.displayNoDataAlert(title: "We apologize...", message: "No places to display =(")
             }
@@ -225,13 +240,12 @@ extension NGPlaceListViewController {
         NGService.getUserPlacesList(term: term, city: city) { (success, list) in
             
             if success, let list = list {
-                NGDataManager.shared.placesList = list
+                NGDataManager.shared.searchResultsList = list
                 
                 DispatchQueue.main.async {
-                    print(NGDataManager.shared.placesList)
+                    self.navigationController?.pushViewController(NGResultsListViewController(userResultsHasLoaded: true), animated: true)
                 }
-            }
-            else {
+            } else {
                 // show no data alert
                 self.displayNoDataAlert(title: "We apologize...", message: "No places to display =(")
             }
@@ -346,12 +360,12 @@ extension NGPlaceListViewController: UICollectionViewDelegateFlowLayout {
 class ListCollectionViewCell: UICollectionViewCell {
     enum Constants {
         static let contentViewCornerRadius: CGFloat = 4.0
-
-        static let imageHeight: CGFloat = 140.0
+        static let imageWidth: CGFloat = 160.0
+        static let imageHeight: CGFloat = 100.0
 
         static let verticalSpacing: CGFloat = 8.0
         static let horizontalPadding: CGFloat = 16.0
-        static let placeVerticalPadding: CGFloat = 80.0
+        static let placeVerticalPadding: CGFloat = 64.0
     }
     
     
@@ -422,22 +436,21 @@ class ListCollectionViewCell: UICollectionViewCell {
 
         // Layout constraints for imageView
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            imageView.widthAnchor.constraint(equalToConstant: Constants.imageWidth),
             imageView.heightAnchor.constraint(equalToConstant: Constants.imageHeight)
         ])
 
         // Layout constraints for nameLabel
         NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.horizontalPadding),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.horizontalPadding),
             nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: Constants.placeVerticalPadding)
         ])
 
         // Layout constraints for addressLabel
         NSLayoutConstraint.activate([
-            addressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.horizontalPadding),
+            addressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             addressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.horizontalPadding),
             addressLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 6.0)
         ])

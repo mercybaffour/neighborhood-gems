@@ -126,12 +126,14 @@ private extension NGPlaceDetailViewController {
         tipsLabel.translatesAutoresizingMaskIntoConstraints = false
         mapView.translatesAutoresizingMaskIntoConstraints = false
         
+        let margins = view.layoutMarginsGuide
+        
         // Layout constraints for container
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
             containerView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
+            containerView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
         ])
       
         // Layout constraints for map
@@ -144,31 +146,33 @@ private extension NGPlaceDetailViewController {
         
         // Layout constraints for imageView
         NSLayoutConstraint.activate([
-            imageView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
             imageView.topAnchor.constraint(equalTo: mapView.bottomAnchor),
+            imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             imageView.heightAnchor.constraint(equalToConstant: Constants.imageHeight)
         ])
 
         // Layout constraints for nameLabel
         NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.horizontalPadding),
-            nameLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.horizontalPadding),
-            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: Constants.placeVerticalPadding)
+            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: Constants.placeVerticalPadding),
+            nameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constants.horizontalPadding),
+            nameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constants.horizontalPadding)
+            
         ])
 
         // Layout constraints for addressLabel
         NSLayoutConstraint.activate([
-            addressLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.horizontalPadding),
-            addressLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.horizontalPadding),
-            addressLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 6.0)
+            addressLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 6.0),
+            addressLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constants.horizontalPadding),
+            addressLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constants.horizontalPadding),
+           
         ])
         
         // Layout constraints for tipsLabel
         NSLayoutConstraint.activate([
-            tipsLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: Constants.horizontalPadding),
-            tipsLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: -Constants.horizontalPadding),
-            tipsLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 16.0)
+            tipsLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 16.0),
+            tipsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constants.horizontalPadding),
+            tipsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constants.horizontalPadding),
         ])
     }
 }

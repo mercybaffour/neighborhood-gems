@@ -46,14 +46,14 @@ class NGService {
     
     //Creating Places Endpoint request with specified parameters
     private static func createSearchRequest(term: String, ll: String) -> URLRequest {
-        let params = ["query": term, "ll": ll, "sort": "RELEVANCE", "limit": "5"]
+        let params = ["query": term, "ll": ll, "sort": "RELEVANCE", "limit": "50"]
         let userEndpoint = NGEndpointCases.getPlaces
         return createRequest(endpoint: userEndpoint, params: params)
     }
     
     //Creating Places Endpoint request with specified parameters
     private static func createUserSearchRequest(term: String, city: String) -> URLRequest {
-        let params = ["query": term, "near": city, "sort": "RELEVANCE", "limit": "5"]
+        let params = ["query": term, "near": city, "sort": "RELEVANCE", "limit": "50"]
         let userEndpoint = NGEndpointCases.getPlaces
         return createRequest(endpoint: userEndpoint, params: params)
     }

@@ -26,7 +26,6 @@
 		831062F9295CD52E008A7BA8 /* NGIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062F8295CD52E008A7BA8 /* NGIcon.swift */; };
 		831062FB295D1D54008A7BA8 /* NGPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062FA295D1D54008A7BA8 /* NGPlaces.swift */; };
 		8359DC7E2961E53300C6E14F /* NGPlaceTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8359DC7D2961E53300C6E14F /* NGPlaceTip.swift */; };
-		83EAE93F295F413F0059FE10 /* NGDiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EAE93E295F413F0059FE10 /* NGDiscoverViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,7 +51,6 @@
 		831062F8295CD52E008A7BA8 /* NGIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGIcon.swift; sourceTree = "<group>"; };
 		831062FA295D1D54008A7BA8 /* NGPlaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGPlaces.swift; sourceTree = "<group>"; };
 		8359DC7D2961E53300C6E14F /* NGPlaceTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGPlaceTip.swift; sourceTree = "<group>"; };
-		83EAE93E295F413F0059FE10 /* NGDiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGDiscoverViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,7 +144,6 @@
 				831062DB295BF439008A7BA8 /* NGPlaceListViewController.swift */,
 				831062DF295BF46E008A7BA8 /* NGPlaceDetailViewController.swift */,
 				831062DD295BF456008A7BA8 /* NGResultsListViewController.swift */,
-				83EAE93E295F413F0059FE10 /* NGDiscoverViewController.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -235,7 +232,6 @@
 				831062E0295BF46E008A7BA8 /* NGPlaceDetailViewController.swift in Sources */,
 				831062C7295BF1D5008A7BA8 /* NGTabBarController.swift in Sources */,
 				831062DE295BF456008A7BA8 /* NGResultsListViewController.swift in Sources */,
-				83EAE93F295F413F0059FE10 /* NGDiscoverViewController.swift in Sources */,
 				831062FB295D1D54008A7BA8 /* NGPlaces.swift in Sources */,
 				831062F9295CD52E008A7BA8 /* NGIcon.swift in Sources */,
 				831062F5295CD254008A7BA8 /* NGLocation.swift in Sources */,
