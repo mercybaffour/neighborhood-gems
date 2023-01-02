@@ -16,7 +16,10 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
         return NGDataManager.shared.placesList
     }
     
+    
     let locationManager = CLLocationManager()
+    
+    var lat_long = ""
     
     // MARK: - UI
     private lazy var layout: UICollectionViewFlowLayout = {
@@ -35,6 +38,7 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Explore"
         label.textColor = .white
         return label
@@ -44,7 +48,7 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
         let textField = UITextField(frame: CGRect(x: 16, y: 125, width: screenWidth - 32, height: 40))
         textField.backgroundColor = UIColor.init(red: 213.0/255.0, green: 207.0/255.0, blue: 207.0/255.0, alpha: 1)
         textField.layer.masksToBounds = false
-        textField.attributedPlaceholder = NSAttributedString(string: "Search by Category", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        textField.attributedPlaceholder = NSAttributedString(string: "Search By Category", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
         textField.layer.shadowRadius = 3.0
         textField.layer.shadowColor = UIColor.init(red: 40.0/255.0, green: 40.0/255.0, blue: 40.0/255.0, alpha: 0.3).cgColor
         textField.layer.shadowOffset = CGSize(width: 1, height: 2)
@@ -54,7 +58,6 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
         searchIcon.image = UIImage.init(systemName: "magnifyingglass")
         searchIcon.tintColor = .black
         searchIcon.layer.cornerRadius = 8.0
-        searchIcon.backgroundColor = .yellow
         let leftView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: 40, height: 40))
         leftView.backgroundColor = .clear
         leftView.addSubview(searchIcon)
@@ -63,11 +66,48 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
         return textField
     }()
     
+    private lazy var citySearchField: UITextField = {
+        let textField = UITextField(frame: CGRect(x: 16, y: 125, width: screenWidth - 32, height: 120))
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.backgroundColor = UIColor.init(red: 213.0/255.0, green: 207.0/255.0, blue: 207.0/255.0, alpha: 1)
+        textField.layer.masksToBounds = false
+        textField.attributedPlaceholder = NSAttributedString(string: "Enter City Destination", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        textField.layer.shadowRadius = 3.0
+        textField.layer.shadowColor = UIColor.init(red: 40.0/255.0, green: 40.0/255.0, blue: 40.0/255.0, alpha: 0.3).cgColor
+        textField.layer.shadowOffset = CGSize(width: 1, height: 2)
+        textField.layer.shadowOpacity = 1.0
+        textField.layer.cornerRadius = 8.0
+        let searchIcon = UIImageView.init(frame: CGRect.init(x: 10, y: 10, width: 20, height: 20))
+        searchIcon.image = UIImage.init(systemName: "house")
+        searchIcon.tintColor = .black
+        searchIcon.layer.cornerRadius = 8.0
+        let leftView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: 40, height: 40))
+        leftView.backgroundColor = .clear
+        leftView.addSubview(searchIcon)
+        textField.leftView = leftView
+        textField.leftViewMode = .always
+        return textField
+    }()
+    
+    private lazy var submitBtn: UIButton = {
+        let btn = UIButton(frame: CGRect(x: 16, y: 125, width: screenWidth - 32, height: 40))
+        btn.layer.masksToBounds = false
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.backgroundColor = .systemOrange
+        btn.layer.cornerRadius = 16.0
+        btn.setTitle("Search", for: .normal)
+        btn.setTitleColor(.white, for: .normal)
+        btn.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        btn.center = self.view.center
+        return btn
+    }()
+    
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLocation()
         setupViews()
+       
     }
     
     
@@ -79,13 +119,24 @@ extension NGPlaceListViewController {
            return UIScreen.main.bounds.size.width
     }
     
+    @objc func buttonPressed(sender: UIButton!) {
+        let categorySearchInput = categorySearchField.text
+        let citySearchInput = citySearchField.text
+        print("Button pressed, input: \(String(describing: categorySearchInput)), \(String(describing: citySearchInput))")
+        
+        loadUserResults(term: categorySearchInput!, city: citySearchInput!)
+    }
+    
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         
-        let lat_long = "\(locValue.latitude),\(locValue.longitude)"
+        lat_long = "\(locValue.latitude),\(locValue.longitude)"
         
         loadData(ll: lat_long)
     }
+     
+    
     
     private func setupLocation() {
         DispatchQueue.global().async {
@@ -99,6 +150,7 @@ extension NGPlaceListViewController {
             }
         }
     }
+     
     
     private func setupViews() {
         
@@ -106,32 +158,51 @@ extension NGPlaceListViewController {
         collectionView.dataSource = self
         
         
+        
         self.view.addSubview(titleLabel)
         self.view.addSubview(categorySearchField)
+        self.view.addSubview(citySearchField)
+        self.view.addSubview(submitBtn)
         self.view.addSubview(collectionView)
+        
+        
+        let margins = view.layoutMarginsGuide
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
         ])
+         
         
         NSLayoutConstraint.activate([
             categorySearchField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-            categorySearchField.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-            categorySearchField.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+            categorySearchField.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+            categorySearchField.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: categorySearchField.bottomAnchor, constant: 16.0),
+            citySearchField.topAnchor.constraint(equalTo: categorySearchField.bottomAnchor, constant: 16.0),
+            citySearchField.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+            citySearchField.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            submitBtn.topAnchor.constraint(equalTo: citySearchField.bottomAnchor, constant: 16.0),
+            submitBtn.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+            submitBtn.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: submitBtn.bottomAnchor, constant: 16.0),
             collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
         ])
     }
     
     //Calling service method to fetch places based on current location
-    private func loadData(ll: String) {
+   func loadData(ll: String) {
         NGService.getPlacesList(term: "art", ll: ll) { (success, list) in
             
             if success, let list = list {
@@ -139,6 +210,25 @@ extension NGPlaceListViewController {
                 
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
+                }
+            }
+            else {
+                // show no data alert
+                self.displayNoDataAlert(title: "We apologize...", message: "No places to display =(")
+            }
+            
+        }
+    }
+    
+    //Calling service method to fetch place list based on user's search term and current location
+    func loadUserResults(term: String, city: String){
+        NGService.getUserPlacesList(term: term, city: city) { (success, list) in
+            
+            if success, let list = list {
+                NGDataManager.shared.placesList = list
+                
+                DispatchQueue.main.async {
+                    print(NGDataManager.shared.placesList)
                 }
             }
             else {
@@ -251,12 +341,13 @@ extension NGPlaceListViewController: UICollectionViewDelegateFlowLayout {
 }
 
 
+
 //Cell Prototype
 class ListCollectionViewCell: UICollectionViewCell {
     enum Constants {
         static let contentViewCornerRadius: CGFloat = 4.0
 
-        static let imageHeight: CGFloat = 100.0
+        static let imageHeight: CGFloat = 140.0
 
         static let verticalSpacing: CGFloat = 8.0
         static let horizontalPadding: CGFloat = 16.0
@@ -271,25 +362,25 @@ class ListCollectionViewCell: UICollectionViewCell {
      
     
     private lazy var imageView: UIImageView = {
-         let iv = UIImageView()
-         iv.contentMode = .scaleAspectFill
-         return iv
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFill
+        return iv
     }()
      
      
     private lazy var nameLabel: UILabel = {
-         let label = UILabel()
-         label.backgroundColor = .clear
-         label.textColor = .label
-         return label
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.textColor = .label
+        return label
     }()
      
     private lazy var addressLabel: UILabel = {
-         let label = UILabel()
-         label.backgroundColor = .clear
-         label.textColor = .label
-         label.numberOfLines = 3
-         return label
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.textColor = .label
+        label.numberOfLines = 3
+        return label
     }()
     
     override init(frame: CGRect) {

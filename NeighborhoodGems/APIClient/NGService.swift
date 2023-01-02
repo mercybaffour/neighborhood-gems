@@ -14,6 +14,7 @@ class NGService {
         //URL
         var components = URLComponents(string: endpoint.url)!
         
+        //If endpoint request uses query params
         if let parameters = params {
             components.queryItems = parameters.map { (key, value) in URLQueryItem(name: key, value: value)}
         }
@@ -45,7 +46,14 @@ class NGService {
     
     //Creating Places Endpoint request with specified parameters
     private static func createSearchRequest(term: String, ll: String) -> URLRequest {
-        let params = ["query": term, "ll": ll, "open_now": "true", "sort": "DISTANCE", "limit": "5"]
+        let params = ["query": term, "ll": ll, "sort": "RELEVANCE", "limit": "5"]
+        let userEndpoint = NGEndpointCases.getPlaces
+        return createRequest(endpoint: userEndpoint, params: params)
+    }
+    
+    //Creating Places Endpoint request with specified parameters
+    private static func createUserSearchRequest(term: String, city: String) -> URLRequest {
+        let params = ["query": term, "near": city, "sort": "RELEVANCE", "limit": "5"]
         let userEndpoint = NGEndpointCases.getPlaces
         return createRequest(endpoint: userEndpoint, params: params)
     }
@@ -90,6 +98,38 @@ class NGService {
         task.resume()
     }
     
+    //Request method for get places endpoint based on user search
+    static func getUserPlacesList(term: String, city: String, completion: @escaping (Bool, [NGPlace]?) -> Void) {
+        let session = URLSession(configuration: .default)
+        let request = createUserSearchRequest(term: term, city: city)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            guard
+                let data = data,                              // data?
+                let response = response as? HTTPURLResponse,  // HTTP response?
+                200 ..< 300 ~= response.statusCode,           // status code range in 2xx?
+                error == nil                                  // no error?
+            else {
+                completion(false, nil)
+                return
+            }
+            
+            var list = [NGPlace]()
+            
+            do {
+                let jsonDecoder = JSONDecoder()
+                let decodedResponse = try jsonDecoder.decode(NGPlaces.self, from: data)
+                list = decodedResponse.results
+            } catch let jsonError {
+                print(jsonError)
+            }
+            
+            //Means we have successfully collected all data objects into a list
+            completion(true, list)
+        }
+        task.resume()
+    }
+
     
     //Request method for getPlaceTips endpoint
     static func getPlaceTips(id: String, completion: @escaping (Bool, [NGPlaceTip]?) -> Void) {
