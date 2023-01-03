@@ -17,11 +17,9 @@ class NGTabBarController: UITabBarController {
     }
     
     private func setUpTabs() {
-        //create instances of view controllers to be attached later
+        //Create instances of view controllers to be attached later
         let placeListVC = NGPlaceListViewController()
         let resultsVC = NGResultsListViewController(userResultsHasLoaded: false)
-
-    
 
         let nav1 = UINavigationController(rootViewController: placeListVC)
         let nav2 = UINavigationController(rootViewController: resultsVC)
@@ -30,7 +28,7 @@ class NGTabBarController: UITabBarController {
         nav2.tabBarItem = UITabBarItem(title: "Your Results", image: UIImage(systemName: "globe"), tag: 2)
         
         
-        //attach view controllers (wrapped in navigation controller) to tab bar controller
+        //Attach view controllers (wrapped in navigation controller) to tab bar controller
         setViewControllers([nav1, nav2], animated: true)
         
     }

@@ -16,10 +16,11 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
         return NGDataManager.shared.placesList
     }
     
+    //To manage user's current location
     let locationManager = CLLocationManager()
     
+    //User's current latitude & longitude
     var lat_long = ""
-    
     
     // MARK: - UI
     private lazy var layout: UICollectionViewFlowLayout = {
@@ -32,7 +33,7 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
         let cv = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
         cv.backgroundColor = .clear
-        cv.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        cv.register(NGListCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         return cv
     }()
     
@@ -47,11 +48,13 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
     }()
     
     private lazy var categorySearchField: UITextField = {
-        var textField = UITextField(frame: CGRect(x: 16, y: 200, width: screenWidth - 32, height: 40))
+        var textField = UITextField(frame: CGRect(x: 16, y: 200, width: UIScreen.main.bounds.size.width - 32, height: 40))
+        textField.loadDropdown(options: NGDataManager.shared.categories)
         textField.backgroundColor = UIColor.init(red: 213.0/255.0, green: 207.0/255.0, blue: 207.0/255.0, alpha: 1)
         textField.layer.masksToBounds = false
         textField.attributedPlaceholder = NSAttributedString(string: "Search By Category", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
         textField.font = UIFont(name: "Futura", size: 18)
+        textField.textColor = .black
         textField.layer.shadowRadius = 3.0
         textField.layer.shadowColor = UIColor.init(red: 40.0/255.0, green: 40.0/255.0, blue: 40.0/255.0, alpha: 0.3).cgColor
         textField.layer.shadowOffset = CGSize(width: 1, height: 2)
@@ -71,11 +74,13 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
     
     private lazy var citySearchField: UITextField = {
         var textField = UITextField()
+        textField.loadDropdown(options: NGDataManager.shared.cities)
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.backgroundColor = UIColor.init(red: 213.0/255.0, green: 207.0/255.0, blue: 207.0/255.0, alpha: 1)
         textField.layer.masksToBounds = false
         textField.attributedPlaceholder = NSAttributedString(string: "Enter City Destination", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
         textField.font = UIFont(name: "Futura", size: 18)
+        textField.textColor = .black
         textField.layer.shadowRadius = 3.0
         textField.layer.shadowColor = UIColor.init(red: 40.0/255.0, green: 40.0/255.0, blue: 40.0/255.0, alpha: 0.3).cgColor
         textField.layer.shadowOffset = CGSize(width: 1, height: 2)
@@ -109,32 +114,38 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        hidePickerView()
         setupLocation()
         setupViews()
-        clearInputs()
-       
     }
-    
-    
 }
 
 extension NGPlaceListViewController {
     
-    var screenWidth : CGFloat {
-        return UIScreen.main.bounds.size.width
-    }
-
+    // MARK: User Interaction
     @objc func buttonPressed(sender: UIButton!) {
         let categorySearchInput = categorySearchField.text
         let citySearchInput = citySearchField.text
         print("Button pressed, input: \(String(describing: categorySearchInput)), \(String(describing: citySearchInput))")
         
         loadUserResults(term: categorySearchInput!, city: citySearchInput!)
-
-       
+        self.view.endEditing(true)
+        categorySearchField.text = nil
+        citySearchField.text = nil
     }
     
+    private func hidePickerView(){
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissPicker))
+        tap.delegate = self
+        //Add gesture recognizer to superview
+        self.view.addGestureRecognizer(tap)
+    }
     
+    @objc func dismissPicker(){
+        self.view.endEditing(true)
+    }
+    
+    //MARK: Location Services
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         
@@ -143,8 +154,6 @@ extension NGPlaceListViewController {
         loadData(ll: lat_long)
     }
      
-    
-    
     private func setupLocation() {
         DispatchQueue.global().async {
             if CLLocationManager.locationServicesEnabled() {
@@ -158,12 +167,11 @@ extension NGPlaceListViewController {
         }
     }
      
-    
+    // MARK: Setup Views & Layout
     private func setupViews() {
         
         collectionView.delegate = self
         collectionView.dataSource = self
-        
         
         self.view.addSubview(titleLabel)
         self.view.addSubview(categorySearchField)
@@ -208,17 +216,9 @@ extension NGPlaceListViewController {
         ])
     }
     
-    func clearInputs() {
-        for view in self.view.subviews {
-            //Get All Values
-            if let textField = view as? UITextField {
-                textField.text = ""
-            }
-        }
-    }
     
     //Calling service method to fetch places based on current location
-    func loadData(ll: String) {
+    private func loadData(ll: String) {
         NGService.getPlacesList(term: "art", ll: ll) { (success, list) in
             
             if success, let list = list {
@@ -236,7 +236,7 @@ extension NGPlaceListViewController {
     }
     
     //Calling service method to fetch place list based on user's search term and current location
-    func loadUserResults(term: String, city: String){
+    private func loadUserResults(term: String, city: String){
         NGService.getUserPlacesList(term: term, city: city) { (success, list) in
             
             if success, let list = list {
@@ -254,7 +254,7 @@ extension NGPlaceListViewController {
     }
     
     //Calling service method to fetch place tips
-    func loadPlaceDetail(with place: NGPlace) {
+    private func loadPlaceDetail(with place: NGPlace) {
         NGService.getPlaceTips(id: place.fsq_id) { (success, response) in
             
             if success, let response = response {
@@ -263,8 +263,7 @@ extension NGPlaceListViewController {
                 DispatchQueue.main.async {
                     self.navigationController?.pushViewController(NGPlaceDetailViewController(place: place, tips: NGDataManager.shared.placeTips), animated: true)
                 }
-            }
-            else {
+            } else {
                 
                 // show no data alert
                 self.displayNoDataAlert(title: "We apologize...", message: "No places to display =(")
@@ -286,6 +285,13 @@ extension NGPlaceListViewController {
     
 }
 
+//Only recognize touch from superview, not descendant subviews
+extension NGPlaceListViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return touch.view == gestureRecognizer.view
+    }
+}
+
 extension NGPlaceListViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -298,7 +304,7 @@ extension NGPlaceListViewController: UICollectionViewDataSource {
     
     //Returns a new cell with customizations
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ListCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! NGListCollectionViewCell
         let place = placeDataSource[indexPath.item]
         cell.populate(with: place)
         
@@ -354,108 +360,3 @@ extension NGPlaceListViewController: UICollectionViewDelegateFlowLayout {
     
 }
 
-
-
-//Cell Prototype
-class ListCollectionViewCell: UICollectionViewCell {
-    enum Constants {
-        static let contentViewCornerRadius: CGFloat = 4.0
-        static let imageWidth: CGFloat = 160.0
-        static let imageHeight: CGFloat = 100.0
-
-        static let verticalSpacing: CGFloat = 8.0
-        static let horizontalPadding: CGFloat = 16.0
-        static let placeVerticalPadding: CGFloat = 64.0
-    }
-    
-    
-    var id: String = {
-        let id = Int.random(in: 1...10)
-        return String(id)
-    }()
-     
-    
-    private lazy var imageView: UIImageView = {
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
-        return iv
-    }()
-     
-     
-    private lazy var nameLabel: UILabel = {
-        let label = UILabel()
-        label.backgroundColor = .clear
-        label.textColor = .label
-        return label
-    }()
-     
-    private lazy var addressLabel: UILabel = {
-        let label = UILabel()
-        label.backgroundColor = .clear
-        label.textColor = .label
-        label.numberOfLines = 3
-        return label
-    }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: .zero)
-        setupViews()
-        setupLayouts()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func populate(with place: NGPlace) {
-        nameLabel.text = place.name
-        addressLabel.text = place.location.formatted_address
-        self.id = place.fsq_id
-    }
-     
-    func setImage(image: UIImage?) {
-         imageView.image = image
-    }
-    
-    
-    private func setupViews() {
-        contentView.clipsToBounds = true
-        contentView.layer.cornerRadius = Constants.contentViewCornerRadius
-        contentView.backgroundColor = .systemBackground
-
-        contentView.addSubview(imageView)
-        contentView.addSubview(nameLabel)
-        contentView.addSubview(addressLabel)
-    
-    }
-    
-    private func setupLayouts() {
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        addressLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        // Layout constraints for imageView
-        NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageView.widthAnchor.constraint(equalToConstant: Constants.imageWidth),
-            imageView.heightAnchor.constraint(equalToConstant: Constants.imageHeight)
-        ])
-
-        // Layout constraints for nameLabel
-        NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.horizontalPadding),
-            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: Constants.placeVerticalPadding)
-        ])
-
-        // Layout constraints for addressLabel
-        NSLayoutConstraint.activate([
-            addressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            addressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Constants.horizontalPadding),
-            addressLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 6.0)
-        ])
-
-    }
-
- }
- 

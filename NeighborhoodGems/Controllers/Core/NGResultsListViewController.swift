@@ -30,7 +30,7 @@ class NGResultsListViewController: UIViewController {
     private lazy var neighborhoodLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "No results so far"
+        label.text = userResultsHasLoaded ? getTopNeighborhoods() : "No results so far"
         label.textAlignment = .center
         label.backgroundColor = .orange
         return label
@@ -43,22 +43,21 @@ class NGResultsListViewController: UIViewController {
     }()
     
     private lazy var collectionView: UICollectionView = {
-        let cv = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
+        let cv = UICollectionView(frame: self.view.frame, collectionViewLayout: self.layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
         cv.backgroundColor = .clear
-        cv.register(ListCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        cv.register(NGListCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         return cv
     }()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if userResultsHasLoaded {
-            neighborhoodLabel.text = getTopNeighborhoods()
-        }
+        print(userResultsHasLoaded)
         setupViews()
-
+        
     }
+    
 
 }
 
@@ -92,7 +91,7 @@ extension NGResultsListViewController {
     }
     
     //Calling service method to fetch place tips
-    func loadPlaceDetail(with place: NGPlace) {
+    private func loadPlaceDetail(with place: NGPlace) {
         NGService.getPlaceTips(id: place.fsq_id) { (success, response) in
             
             if success, let response = response {
@@ -127,12 +126,17 @@ extension NGResultsListViewController {
         var result = ""
         
         for place in placeDataSource {
-            let neighborhood = place.location.neighborhood[0]
-            neighborhoodFrequencies[neighborhood] = (neighborhoodFrequencies[neighborhood] ?? 0) + 1
+            let neighborhoods = place.location.neighborhood
+            for neighborhood in neighborhoods {
+                neighborhoodFrequencies[neighborhood] = (neighborhoodFrequencies[neighborhood] ?? 0) + 1
+            }
         }
         
         if let topNeighborhoods = neighborhoodFrequencies.values.max()
-            .map({ maxFrequency in neighborhoodFrequencies.filter { $0.value == maxFrequency }.map { $0.key } }) {
+            .map(
+                { maxValue in neighborhoodFrequencies.filter { $0.value == maxValue }.map { $0.key } }
+            )
+        {
             result = topNeighborhoods.joined(separator: " | ")
         }
         
@@ -152,7 +156,7 @@ extension NGResultsListViewController: UICollectionViewDataSource {
     
     //Returns a new cell with customizations
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ListCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! NGListCollectionViewCell
         let place = placeDataSource[indexPath.item]
         cell.populate(with: place)
         

@@ -105,7 +105,7 @@ private extension NGPlaceDetailViewController {
         static let placeVerticalPadding: CGFloat = 8.0
     }
     
-    func setupViews() {
+    private func setupViews() {
         navigationItem.title = "Place Details"
         
         self.view.addSubview(containerView)
@@ -118,7 +118,7 @@ private extension NGPlaceDetailViewController {
     
     }
     
-    func setupLayouts() {
+    private func setupLayouts() {
         containerView.translatesAutoresizingMaskIntoConstraints = false
         imageView.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.translatesAutoresizingMaskIntoConstraints = false

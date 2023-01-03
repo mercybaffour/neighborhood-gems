@@ -15,7 +15,6 @@ protocol NGEndpoint {
 }
 
 extension NGEndpoint {
-    // a default extension that creates the full URL
     var url: String {
         return baseURLString + path
     }
