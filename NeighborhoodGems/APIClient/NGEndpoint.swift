@@ -11,7 +11,7 @@ protocol NGEndpoint {
     var baseURLString: String { get }
     var path: String { get }
     var headers: [String: Any]? { get }
-    var body: [String: Any]? { get }
+    var body: NSMutableData? { get }
 }
 
 extension NGEndpoint {

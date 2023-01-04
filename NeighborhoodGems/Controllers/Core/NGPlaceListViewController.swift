@@ -17,10 +17,7 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     //To manage user's current location
-    let locationManager = CLLocationManager()
-    
-    //User's current latitude & longitude
-    var lat_long = ""
+    var locationService = NGLocationManager()
     
     // MARK: - UI
     private lazy var layout: UICollectionViewFlowLayout = {
@@ -43,7 +40,7 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
         label.font = UIFont(name: "Futura", size: 32.0)
         label.textAlignment = .center
         label.text = "explore"
-        label.textColor = .white
+        label.textColor = .label
         return label
     }()
     
@@ -114,9 +111,16 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        locationService.start()
         hidePickerView()
-        setupLocation()
         setupViews()
+        loadData(ll: getLatLong())
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        hidePickerView()
+        categorySearchField.text = nil
+        citySearchField.text = nil
     }
 }
 
@@ -130,8 +134,6 @@ extension NGPlaceListViewController {
         
         loadUserResults(term: categorySearchInput!, city: citySearchInput!)
         self.view.endEditing(true)
-        categorySearchField.text = nil
-        citySearchField.text = nil
     }
     
     private func hidePickerView(){
@@ -146,26 +148,13 @@ extension NGPlaceListViewController {
     }
     
     //MARK: Location Services
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        
-        lat_long = "\(locValue.latitude),\(locValue.longitude)"
-        
-        loadData(ll: lat_long)
+    private func getLatLong() -> String {
+        let latitude = locationService.locationManager.location!.coordinate.latitude
+        let longitude = locationService.locationManager.location!.coordinate.longitude
+        let latLong = "\(latitude),\(longitude)"
+        return latLong
     }
-     
-    private func setupLocation() {
-        DispatchQueue.global().async {
-            if CLLocationManager.locationServicesEnabled() {
-                self.locationManager.requestAlwaysAuthorization()
-                self.locationManager.requestWhenInUseAuthorization()
-                
-                self.locationManager.delegate = self
-                self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-                self.locationManager.startUpdatingLocation()
-            }
-        }
-    }
+    
      
     // MARK: Setup Views & Layout
     private func setupViews() {
@@ -219,7 +208,7 @@ extension NGPlaceListViewController {
     
     //Calling service method to fetch places based on current location
     private func loadData(ll: String) {
-        NGService.getPlacesList(term: "art", ll: ll) { (success, list) in
+        NGService.getPlacesList(term: "Community", ll: ll) { (success, list) in
             
             if success, let list = list {
                 NGDataManager.shared.placesList = list
@@ -235,6 +224,7 @@ extension NGPlaceListViewController {
         }
     }
     
+   
     //Calling service method to fetch place list based on user's search term and current location
     private func loadUserResults(term: String, city: String){
         NGService.getUserPlacesList(term: term, city: city) { (success, list) in
@@ -243,7 +233,7 @@ extension NGPlaceListViewController {
                 NGDataManager.shared.searchResultsList = list
                 
                 DispatchQueue.main.async {
-                    self.navigationController?.pushViewController(NGResultsListViewController(userResultsHasLoaded: true), animated: true)
+                    self.navigationController?.pushViewController(NGResultsListViewController(), animated: true)
                 }
             } else {
                 // show no data alert

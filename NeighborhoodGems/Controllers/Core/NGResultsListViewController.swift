@@ -15,22 +15,11 @@ class NGResultsListViewController: UIViewController {
         return NGDataManager.shared.searchResultsList
     }
     
-    var userResultsHasLoaded: Bool
-    
-    init(userResultsHasLoaded: Bool) {
-        self.userResultsHasLoaded = userResultsHasLoaded
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     // MARK: - UI
     private lazy var neighborhoodLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = userResultsHasLoaded ? getTopNeighborhoods() : "No results so far"
+        label.text = getTopNeighborhoods()
         label.textAlignment = .center
         label.backgroundColor = .orange
         return label
@@ -53,12 +42,10 @@ class NGResultsListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(userResultsHasLoaded)
         setupViews()
-        
     }
     
-
+    
 }
 
 extension NGResultsListViewController {

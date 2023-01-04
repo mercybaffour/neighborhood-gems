@@ -19,13 +19,13 @@ class NGTabBarController: UITabBarController {
     private func setUpTabs() {
         //Create instances of view controllers to be attached later
         let placeListVC = NGPlaceListViewController()
-        let resultsVC = NGResultsListViewController(userResultsHasLoaded: false)
+        let eventsVC = NGEventsViewController()
 
         let nav1 = UINavigationController(rootViewController: placeListVC)
-        let nav2 = UINavigationController(rootViewController: resultsVC)
+        let nav2 = UINavigationController(rootViewController: eventsVC)
                 
-        nav1.tabBarItem = UITabBarItem(title: "Explore", image: UIImage(systemName: "globe"), tag: 1)
-        nav2.tabBarItem = UITabBarItem(title: "Your Results", image: UIImage(systemName: "globe"), tag: 2)
+        nav1.tabBarItem = UITabBarItem(title: "Explore", image: UIImage(systemName: "magnifyingglass"), tag: 1)
+        nav2.tabBarItem = UITabBarItem(title: "Events", image: UIImage(systemName: "ticket"), tag: 2)
         
         
         //Attach view controllers (wrapped in navigation controller) to tab bar controller

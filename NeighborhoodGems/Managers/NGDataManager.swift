@@ -33,6 +33,12 @@ class NGDataManager {
         
     }()
     
+    lazy var eventsList: [NGEvent] = {
+        //Placeholder Data
+        var list = [NGEvent]()
+        return list
+    } ()
+    
     lazy var categories: [String] = {
         let categoryList = ["", "Arts and Entertainment", "Coffee", "Dining and Drinking", "Landmarks and Outdoors", "Retail", "Sports and Recreation"]
         return categoryList

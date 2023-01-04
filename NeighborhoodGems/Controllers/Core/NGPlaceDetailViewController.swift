@@ -115,7 +115,6 @@ private extension NGPlaceDetailViewController {
         containerView.addSubview(addressLabel)
         containerView.addSubview(tipsLabel)
         
-    
     }
     
     private func setupLayouts() {

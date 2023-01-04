@@ -10,6 +10,7 @@ enum NGEndpointCases: NGEndpoint {
     //CASES
     case getPlaces
     case getPlaceTips
+    case getEvents
     
     //Endpoint Required Fields
     var apiKey: String {
@@ -17,9 +18,14 @@ enum NGEndpointCases: NGEndpoint {
         return apiKey!
     }
     
+    var apiToken: String {
+        let apiToken = Bundle.main.infoDictionary?["API_TOKEN"] as? String
+        return apiToken!
+    }
+    
     var httpMethod: String {
         switch self {
-        case .getPlaces, .getPlaceTips:
+        case .getPlaces, .getPlaceTips, .getEvents:
             return "GET"
         }
     }
@@ -28,6 +34,8 @@ enum NGEndpointCases: NGEndpoint {
         switch self {
         case .getPlaces, .getPlaceTips:
             return "https://api.foursquare.com/"
+        case .getEvents:
+            return "https://api.predicthq.com/v1/"
         }
     }
     
@@ -37,7 +45,8 @@ enum NGEndpointCases: NGEndpoint {
             return "v3/places/search"
         case .getPlaceTips:
             return "v3/places/"
-            
+        case .getEvents:
+            return "events/"
         }
     }
     
@@ -47,13 +56,17 @@ enum NGEndpointCases: NGEndpoint {
             return ["Accept": "application/json",
                     "Authorization": apiKey
             ]
+        case .getEvents:
+            return ["Accept": "application/json",
+                    "Authorization": "Bearer \(apiToken)"
+            ]
         }
     }
     
-    var body: [String : Any]? {
+    var body: NSMutableData? {
         switch self {
-        case .getPlaces, .getPlaceTips:
-            return [:]
+        case .getPlaces, .getPlaceTips, .getEvents:
+            return nil
         }
     }
 }

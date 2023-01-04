@@ -64,8 +64,17 @@ class NGService {
         return createRequest(endpoint: userEndpoint, id: id)
     }
     
-    //Additional endpoint requests can be created here
     
+    //Creating Get Events request with specified parameters
+    private static func createEventsSearchRequest(ll: String) -> URLRequest {
+        let area = "50km@\(ll)"
+        let params = ["within": area]
+        let userEndpoint = NGEndpointCases.getEvents
+        return createRequest(endpoint: userEndpoint, params: params)
+    }
+    
+    //Additional endpoint requests can be created here
+
     //Request method for getPlaces endpoint
     static func getPlacesList(term: String, ll: String, completion: @escaping (Bool, [NGPlace]?) -> Void) {
         let session = URLSession(configuration: .default)
@@ -74,8 +83,6 @@ class NGService {
         let task = session.dataTask(with: request) { data, response, error in
             guard
                 let data = data,                              // data?
-                let response = response as? HTTPURLResponse,  // HTTP response?
-                200 ..< 300 ~= response.statusCode,           // status code range in 2xx?
                 error == nil                                  // no error?
             else {
                 completion(false, nil)
@@ -106,8 +113,6 @@ class NGService {
         let task = session.dataTask(with: request) { data, response, error in
             guard
                 let data = data,                              // data?
-                let response = response as? HTTPURLResponse,  // HTTP response?
-                200 ..< 300 ~= response.statusCode,           // status code range in 2xx?
                 error == nil                                  // no error?
             else {
                 completion(false, nil)
@@ -139,8 +144,6 @@ class NGService {
         let task = session.dataTask(with: request) { data, response, error in
             guard
                 let data = data,                              // data?
-                let response = response as? HTTPURLResponse,  // HTTP response?
-                200 ..< 300 ~= response.statusCode,           // status code range in 2xx?
                 error == nil                                  // no error?
             else {
                 completion(false, nil)
@@ -162,6 +165,35 @@ class NGService {
         task.resume()
     }
     
+    //Request method for getEvents endpoint
+    static func getEvents(ll: String, completion: @escaping (Bool, [NGEvent]?) -> Void) {
+        let session = URLSession(configuration: .default)
+        let request = createEventsSearchRequest(ll: ll)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            guard
+                let data = data,                              // data?
+                error == nil                                  // no error?
+            else {
+                completion(false, nil)
+                return
+            }
+            
+            var list = [NGEvent]()
+            
+            do {
+                let jsonDecoder = JSONDecoder()
+                let decodedResponse = try jsonDecoder.decode(NGEvents.self, from: data)
+                list = decodedResponse.results
+            } catch let jsonError {
+                print(jsonError)
+            }
+            
+            //Means we have successfully collected all data objects into a list
+            completion(true, list)
+        }
+        task.resume()
+    }
     
     //Requesting, then serving actual images
     static func getImage(imageUrl: String, completion: @escaping (Bool, Data?) -> Void) {
