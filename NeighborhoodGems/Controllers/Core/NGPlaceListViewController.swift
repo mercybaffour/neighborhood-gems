@@ -11,12 +11,12 @@ import CoreLocation
 class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
 
     //MARK: Management
-    //Provides data to populate our grid view
+    ///Provides data to populate our grid view
     var placeDataSource: [NGPlace] {
         return NGDataManager.shared.placesList
     }
     
-    //To manage user's current location
+    ///To manage user's current location
     var locationService = NGLocationManager()
     
     // MARK: - UI
@@ -46,17 +46,9 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
     
     private lazy var categorySearchField: UITextField = {
         var textField = UITextField(frame: CGRect(x: 16, y: 200, width: UIScreen.main.bounds.size.width - 32, height: 40))
+        textField.setBaseStyling()
         textField.loadDropdown(options: NGDataManager.shared.categories)
-        textField.backgroundColor = UIColor.init(red: 213.0/255.0, green: 207.0/255.0, blue: 207.0/255.0, alpha: 1)
-        textField.layer.masksToBounds = false
         textField.attributedPlaceholder = NSAttributedString(string: "Search By Category", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
-        textField.font = UIFont(name: "Futura", size: 18)
-        textField.textColor = .black
-        textField.layer.shadowRadius = 3.0
-        textField.layer.shadowColor = UIColor.init(red: 40.0/255.0, green: 40.0/255.0, blue: 40.0/255.0, alpha: 0.3).cgColor
-        textField.layer.shadowOffset = CGSize(width: 1, height: 2)
-        textField.layer.shadowOpacity = 1.0
-        textField.layer.cornerRadius = 8.0
         let searchIcon = UIImageView.init(frame: CGRect.init(x: 10, y: 10, width: 20, height: 20))
         searchIcon.image = UIImage.init(systemName: "magnifyingglass")
         searchIcon.tintColor = .black
@@ -72,17 +64,8 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
     private lazy var citySearchField: UITextField = {
         var textField = UITextField()
         textField.loadDropdown(options: NGDataManager.shared.cities)
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.backgroundColor = UIColor.init(red: 213.0/255.0, green: 207.0/255.0, blue: 207.0/255.0, alpha: 1)
-        textField.layer.masksToBounds = false
+        textField.setBaseStyling()
         textField.attributedPlaceholder = NSAttributedString(string: "Enter City Destination", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
-        textField.font = UIFont(name: "Futura", size: 18)
-        textField.textColor = .black
-        textField.layer.shadowRadius = 3.0
-        textField.layer.shadowColor = UIColor.init(red: 40.0/255.0, green: 40.0/255.0, blue: 40.0/255.0, alpha: 0.3).cgColor
-        textField.layer.shadowOffset = CGSize(width: 1, height: 2)
-        textField.layer.shadowOpacity = 1.0
-        textField.layer.cornerRadius = 8.0
         let searchIcon = UIImageView.init(frame: CGRect.init(x: 10, y: 10, width: 20, height: 20))
         searchIcon.image = UIImage.init(systemName: "house")
         searchIcon.tintColor = .black
@@ -206,7 +189,7 @@ extension NGPlaceListViewController {
     }
     
     
-    //Calling service method to fetch places based on current location
+    ///API Call to fetch places based on current location
     private func loadData(ll: String) {
         NGAPIService.getPlacesList(term: "Community", ll: ll) { (success, list) in
             
@@ -225,7 +208,7 @@ extension NGPlaceListViewController {
     }
     
    
-    //Calling service method to fetch place list based on user's search term and current location
+    /// API Call  to fetch place list based on user's search terms: category & city
     private func loadUserResults(term: String, city: String){
         NGAPIService.getUserPlacesList(term: term, city: city) { (success, list) in
             
@@ -243,7 +226,7 @@ extension NGPlaceListViewController {
         }
     }
     
-    //Calling service method to fetch place tips
+    /// API Call  to fetch place tips
     private func loadPlaceDetail(with place: NGPlace) {
         NGAPIService.getPlaceTips(id: place.fsq_id) { (success, response) in
             
@@ -275,7 +258,7 @@ extension NGPlaceListViewController {
     
 }
 
-//Only recognize touch from superview, not descendant subviews
+/// Allows view controller to recognize touch on superview, but not descendant subviews
 extension NGPlaceListViewController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         return touch.view == gestureRecognizer.view
@@ -320,8 +303,7 @@ extension NGPlaceListViewController: UICollectionViewDataSource {
     
 }
 
-
-//Upon cell selection, api call to fetch place details
+/// API Call to fetch place details when cell is selected
 extension NGPlaceListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         

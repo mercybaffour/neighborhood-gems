@@ -95,6 +95,7 @@ class NGPlaceDetailViewController: UIViewController {
 }
 
 private extension NGPlaceDetailViewController {
+    //Constants for layout constraints
     enum Constants {
         static let screenWidth : CGFloat = UIScreen.main.bounds.size.width
         static let containerHeight : CGFloat = UIScreen.main.bounds.size.height

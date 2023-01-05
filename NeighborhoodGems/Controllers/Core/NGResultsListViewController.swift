@@ -39,7 +39,7 @@ class NGResultsListViewController: UIViewController {
         return cv
     }()
     
-    
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -60,12 +60,14 @@ extension NGResultsListViewController {
         
         let margins = view.layoutMarginsGuide
         
+        //Layout Constraints for neighborhoodLabel
         NSLayoutConstraint.activate([
             neighborhoodLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
             neighborhoodLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             neighborhoodLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor),
         ])
         
+        //Layout Constraints for collectionView
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: neighborhoodLabel.bottomAnchor, constant: 16.0),
             collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
@@ -77,7 +79,7 @@ extension NGResultsListViewController {
        
     }
     
-    //Calling service method to fetch place tips
+   /// API Call to fetch place details
     private func loadPlaceDetail(with place: NGPlace) {
         NGAPIService.getPlaceTips(id: place.fsq_id) { (success, response) in
             
@@ -108,10 +110,13 @@ extension NGResultsListViewController {
         present(alertController, animated: true)
     }
     
-    private func getTopNeighborhoods() -> String {
+    ///Get most frequent neighborhoods listed in API call (getUserPlacesList)  results
+      private func getTopNeighborhoods() -> String {
+        //Initialize neighborhood frequency dictionary and result
         var neighborhoodFrequencies: [String: Int] = [:]
         var result = ""
         
+        //Add each neighborhood's occurrence to dictionary
         for place in placeDataSource {
             let neighborhoods = place.location.neighborhood
             for neighborhood in neighborhoods {
@@ -119,9 +124,11 @@ extension NGResultsListViewController {
             }
         }
         
+        //Find most frequent neighborhoods in dictionary using the max, map, and filter methods & store result(s)
         if let topNeighborhoods = neighborhoodFrequencies.values.max()
             .map(
-                { maxValue in neighborhoodFrequencies.filter { $0.value == maxValue }.map { $0.key } }
+                
+                { maxValue in neighborhoodFrequencies.filter { $0.value == maxValue }.map { $0.key } } //filters dictionary based on max value & returns the associated keys in an array
             )
         {
             result = topNeighborhoods.joined(separator: " | ")
@@ -156,7 +163,7 @@ extension NGResultsListViewController: UICollectionViewDataSource {
 }
 
 
-//Upon cell selection, api call to fetch place details
+///API  call to fetch place details when cell is selected 
 extension NGResultsListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
