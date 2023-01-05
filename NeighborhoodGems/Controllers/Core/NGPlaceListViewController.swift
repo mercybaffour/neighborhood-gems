@@ -208,7 +208,7 @@ extension NGPlaceListViewController {
     
     //Calling service method to fetch places based on current location
     private func loadData(ll: String) {
-        NGService.getPlacesList(term: "Community", ll: ll) { (success, list) in
+        NGAPIService.getPlacesList(term: "Community", ll: ll) { (success, list) in
             
             if success, let list = list {
                 NGDataManager.shared.placesList = list
@@ -227,7 +227,7 @@ extension NGPlaceListViewController {
    
     //Calling service method to fetch place list based on user's search term and current location
     private func loadUserResults(term: String, city: String){
-        NGService.getUserPlacesList(term: term, city: city) { (success, list) in
+        NGAPIService.getUserPlacesList(term: term, city: city) { (success, list) in
             
             if success, let list = list {
                 NGDataManager.shared.searchResultsList = list
@@ -245,7 +245,7 @@ extension NGPlaceListViewController {
     
     //Calling service method to fetch place tips
     private func loadPlaceDetail(with place: NGPlace) {
-        NGService.getPlaceTips(id: place.fsq_id) { (success, response) in
+        NGAPIService.getPlaceTips(id: place.fsq_id) { (success, response) in
             
             if success, let response = response {
                 NGDataManager.shared.placeTips = response
@@ -303,7 +303,7 @@ extension NGPlaceListViewController: UICollectionViewDataSource {
         
         
         /*let imageURL = "https://api.foursquare.com/v3/places/\(place.fsq_id)/photos"
-        NGService.getImage(imageUrl: imageURL, completion: { (success, imageData) in
+        NGAPIService.getImage(imageUrl: imageURL, completion: { (success, imageData) in
             print("I'm in cell for item at")
             if success, let imageData = imageData,
                 let photo = UIImage(data: imageData) {

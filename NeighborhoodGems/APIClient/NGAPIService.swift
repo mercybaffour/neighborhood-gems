@@ -2,41 +2,43 @@
 //  NGService.swift
 //  NeighborhoodGems
 //
-// 
 //
 
 import Foundation
 
-class NGService {
+class NGAPIService {
     
-    //Creating general base request
-    private static func createRequest(endpoint: NGEndpointCases, params: [String: String]? = nil, id: String? = nil) -> URLRequest {
-        //URL
-        var components = URLComponents(string: endpoint.url)!
+    //MARK: Foursquare API Requests
+    
+    ///Creating a  base network request
+    private static func createFoursquareRequest(endpoint: APIs.Foursquare, params: [String: String]? = nil, id: String? = nil) -> URLRequest {
         
-        //If endpoint request uses query params
+        // Get base url
+        var url: URL {
+            switch endpoint {
+                case .getPlaces:
+                    let url = APIs.Foursquare.getPlaces.url
+                    return url
+                case .getPlaceTips:
+                    let url = APIs.Foursquare.getPlaceTips(id: id!).url
+                    return url
+            }
+        }
+       
+        // Using the URLComponents class to parse and construct our full URL
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        
         if let parameters = params {
             components.queryItems = parameters.map { (key, value) in URLQueryItem(name: key, value: value)}
         }
         
-        //If endpoint has required path params
-        if let id = id {
-            components.path += id
-            
-            if endpoint == .getPlaceTips {
-                components.path += "/tips"
-            }
-        }
-
-        //Percent encoding
         components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
         
+        //Building our Request
         var request = URLRequest(url: components.url!)
         
-        //HTTP Method
         request.httpMethod = endpoint.httpMethod
         
-        //HTTP Headers
         endpoint.headers?.forEach({ header in
             request.setValue(header.value as? String, forHTTPHeaderField: header.key)
         })
@@ -44,42 +46,16 @@ class NGService {
         return request
     }
     
-    //Creating Places Endpoint request with specified parameters
-    private static func createSearchRequest(term: String, ll: String) -> URLRequest {
-        let params = ["query": term, "ll": ll, "sort": "RELEVANCE", "limit": "50"]
-        let userEndpoint = NGEndpointCases.getPlaces
-        return createRequest(endpoint: userEndpoint, params: params)
-    }
-    
-    //Creating Places Endpoint request with specified parameters
-    private static func createUserSearchRequest(term: String, city: String) -> URLRequest {
-        let params = ["query": term, "near": city, "sort": "RELEVANCE", "limit": "50"]
-        let userEndpoint = NGEndpointCases.getPlaces
-        return createRequest(endpoint: userEndpoint, params: params)
-    }
-    
-    //Creating Place Tips Endpoint request with specified parameters
-    private static func createPlaceTipsRequest(id: String) -> URLRequest {
-        let userEndpoint = NGEndpointCases.getPlaceTips
-        return createRequest(endpoint: userEndpoint, id: id)
-    }
-    
-    
-    //Creating Get Events request with specified parameters
-    private static func createEventsSearchRequest(ll: String) -> URLRequest {
-        let area = "50km@\(ll)"
-        let params = ["within": area]
-        let userEndpoint = NGEndpointCases.getEvents
-        return createRequest(endpoint: userEndpoint, params: params)
-    }
-    
-    //Additional endpoint requests can be created here
-
-    //Request method for getPlaces endpoint
+    /// Making network call to  getPlaces endpoint based on user's current location
     static func getPlacesList(term: String, ll: String, completion: @escaping (Bool, [NGPlace]?) -> Void) {
-        let session = URLSession(configuration: .default)
-        let request = createSearchRequest(term: term, ll: ll)
         
+        let params = ["query": term, "ll": ll, "sort": "RELEVANCE", "limit": "50"]
+        let userEndpoint = APIs.Foursquare.getPlaces
+       
+        let request = createFoursquareRequest(endpoint: userEndpoint, params: params)
+        
+        //Using URLSession class to manage HTTP session for this request
+        let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { data, response, error in
             guard
                 let data = data,                              // data?
@@ -105,11 +81,15 @@ class NGService {
         task.resume()
     }
     
-    //Request method for get places endpoint based on user search
+    /// Making network call to "getPlaces" endpoint based on user search
     static func getUserPlacesList(term: String, city: String, completion: @escaping (Bool, [NGPlace]?) -> Void) {
-        let session = URLSession(configuration: .default)
-        let request = createUserSearchRequest(term: term, city: city)
         
+        let params = ["query": term, "near": city, "sort": "RELEVANCE", "limit": "50"]
+        let userEndpoint = APIs.Foursquare.getPlaces
+        let request = createFoursquareRequest(endpoint: userEndpoint, params: params)
+        
+        //Using URLSession class to manage HTTP session for this request
+        let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { data, response, error in
             guard
                 let data = data,                              // data?
@@ -136,11 +116,14 @@ class NGService {
     }
 
     
-    //Request method for getPlaceTips endpoint
+    /// Making network call to  "getPlaceTips" endpoint
     static func getPlaceTips(id: String, completion: @escaping (Bool, [NGPlaceTip]?) -> Void) {
-        let session = URLSession(configuration: .default)
-        let request = createPlaceTipsRequest(id: id)
         
+        let userEndpoint = APIs.Foursquare.getPlaceTips(id: id)
+        let request = createFoursquareRequest(endpoint: userEndpoint, id: id)
+        
+        //Using URLSession class to manage HTTP session for this request
+        let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { data, response, error in
             guard
                 let data = data,                              // data?
@@ -164,12 +147,52 @@ class NGService {
         }
         task.resume()
     }
+   
+    // MARK: PredictHQ API Requests
     
-    //Request method for getEvents endpoint
-    static func getEvents(ll: String, completion: @escaping (Bool, [NGEvent]?) -> Void) {
-        let session = URLSession(configuration: .default)
-        let request = createEventsSearchRequest(ll: ll)
+    ///Creating a  base network request
+    private static func createPredictHQRequest(endpoint: APIs.PredictHQ, params: [String: String]? = nil, id: String? = nil) -> URLRequest {
         
+        // Get base url
+        var url: URL {
+            switch endpoint {
+                case .getEvents:
+                    let url = APIs.PredictHQ.getEvents.url
+                    return url
+            }
+        }
+       
+        // Using the URLComponents class to parse and construct our full URL
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        
+        if let parameters = params {
+            components.queryItems = parameters.map { (key, value) in URLQueryItem(name: key, value: value)}
+        }
+        
+        components.percentEncodedQuery = components.percentEncodedQuery?.replacingOccurrences(of: "+", with: "%2B")
+        
+        //Building our Request
+        var request = URLRequest(url: components.url!)
+        
+        request.httpMethod = endpoint.httpMethod
+        
+        endpoint.headers?.forEach({ header in
+            request.setValue(header.value as? String, forHTTPHeaderField: header.key)
+        })
+        
+        return request
+    }
+    
+    /// Making network call to "getEvents" endpoint
+    static func getEvents(ll: String, completion: @escaping (Bool, [NGEvent]?) -> Void) {
+        
+        let area = "50km@\(ll)"
+        let params = ["within": area]
+        let userEndpoint = APIs.PredictHQ.getEvents
+        let request = createPredictHQRequest(endpoint: userEndpoint, params: params)
+        
+        //Using URLSession class to manage HTTP session for this request
+        let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { data, response, error in
             guard
                 let data = data,                              // data?
@@ -195,6 +218,7 @@ class NGService {
         task.resume()
     }
     
+    /*
     //Requesting, then serving actual images
     static func getImage(imageUrl: String, completion: @escaping (Bool, Data?) -> Void) {
         //Headers
@@ -230,4 +254,5 @@ class NGService {
         task.resume()
         
     }
+     */
 }

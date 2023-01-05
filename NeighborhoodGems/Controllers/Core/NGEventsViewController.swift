@@ -29,7 +29,7 @@ extension NGEventsViewController {
     //MARK: Location Services
     //Calling service method to fetch events based on current location
     private func loadEvents(ll: String) {
-        NGService.getEvents(ll: ll) { (success, list) in
+        NGAPIService.getEvents(ll: ll) { (success, list) in
             
             if success, let list = list {
                 NGDataManager.shared.eventsList = list

@@ -79,7 +79,7 @@ extension NGResultsListViewController {
     
     //Calling service method to fetch place tips
     private func loadPlaceDetail(with place: NGPlace) {
-        NGService.getPlaceTips(id: place.fsq_id) { (success, response) in
+        NGAPIService.getPlaceTips(id: place.fsq_id) { (success, response) in
             
             if success, let response = response {
                 NGDataManager.shared.placeTips = response
