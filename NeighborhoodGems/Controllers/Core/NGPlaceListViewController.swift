@@ -91,6 +91,16 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
         return btn
     }()
     
+    private lazy var placesNearbyLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont(name: "Futura", size: 24.0)
+        label.textAlignment = .center
+        //label.text = locationDenied ? "Community Centers in New York, NY" : "Places Nearby"
+        label.textColor = .label
+        return label
+    }()
+    
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -132,10 +142,14 @@ extension NGPlaceListViewController {
     
     //MARK: Location Services
     private func getLatLong() -> String {
-        let latitude = locationService.locationManager.location!.coordinate.latitude
-        let longitude = locationService.locationManager.location!.coordinate.longitude
-        let latLong = "\(latitude),\(longitude)"
-        return latLong
+        if let latitude = locationService.locationManager.location?.coordinate.latitude, let longitude = locationService.locationManager.location?.coordinate.longitude {
+            placesNearbyLabel.text = "Places Nearby"
+            return "\(latitude),\(longitude)"
+        } else {
+            //Default Location: New York, New York
+            placesNearbyLabel.text = "Centers in New York"
+            return "40.730610,-73.935242"
+        }
     }
     
      
@@ -149,6 +163,7 @@ extension NGPlaceListViewController {
         self.view.addSubview(categorySearchField)
         self.view.addSubview(citySearchField)
         self.view.addSubview(submitBtn)
+        self.view.addSubview(placesNearbyLabel)
         self.view.addSubview(collectionView)
         
         
@@ -181,7 +196,13 @@ extension NGPlaceListViewController {
         ])
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: submitBtn.bottomAnchor, constant: 16.0),
+            placesNearbyLabel.topAnchor.constraint(equalTo: submitBtn.bottomAnchor, constant: 16.0),
+            placesNearbyLabel.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
+            placesNearbyLabel.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: placesNearbyLabel.bottomAnchor, constant: 16.0),
             collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: margins.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: margins.trailingAnchor)

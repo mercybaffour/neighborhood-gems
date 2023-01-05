@@ -14,7 +14,7 @@ struct NGLocation: Codable {
     let dma: String?
     let formatted_address: String
     let locality: String
-    let neighborhood: [String]
+    let neighborhood: [String]?
     let postcode: String
     let region: String?
     

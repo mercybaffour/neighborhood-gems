@@ -118,9 +118,10 @@ extension NGResultsListViewController {
         
         //Add each neighborhood's occurrence to dictionary
         for place in placeDataSource {
-            let neighborhoods = place.location.neighborhood
-            for neighborhood in neighborhoods {
-                neighborhoodFrequencies[neighborhood] = (neighborhoodFrequencies[neighborhood] ?? 0) + 1
+            if let neighborhoods = place.location.neighborhood {
+                for neighborhood in neighborhoods {
+                    neighborhoodFrequencies[neighborhood] = (neighborhoodFrequencies[neighborhood] ?? 0) + 1
+                }
             }
         }
         

@@ -9,7 +9,7 @@ import CoreLocation
 
 class NGLocationManager: NSObject, CLLocationManagerDelegate {
     
-    let locationManager : CLLocationManager
+    var locationManager : CLLocationManager!
 
     override init() {
         locationManager = CLLocationManager()
@@ -22,7 +22,26 @@ class NGLocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
     }
-
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        switch status {
+            case .denied:
+                print("Setting option is denied")
+            case .notDetermined:
+                print("Setting option is notDetermined")
+            case .authorizedWhenInUse:
+                print("Setting option is authorizedWhenInUse")
+                locationManager?.requestLocation()
+            case .authorizedAlways:
+                print("Setting option is authorizedAlways")
+                locationManager?.requestLocation()
+            case .restricted:
+                print("Setting option is restricted")
+            default:
+                print("LocationManager - default case")
+        }
+    }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let currentLocation = locations.last else {return}
         print(currentLocation)

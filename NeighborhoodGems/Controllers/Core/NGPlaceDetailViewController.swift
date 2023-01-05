@@ -28,22 +28,15 @@ class NGPlaceDetailViewController: UIViewController {
     // MARK: UI
     private lazy var containerView: UIView = {
         let container = UIView.init(frame: CGRect.init(x: 0, y: 0, width: Constants.screenWidth - 32, height: Constants.containerHeight))
-        container.backgroundColor = .clear
+        container.backgroundColor = .white
         return container
     }()
-    
-    
-    private lazy var imageView: UIImageView = {
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
-        return iv
-    }()
-     
      
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
-        label.textColor = .label
+        label.textColor = .purple
+        label.font = UIFont.boldSystemFont(ofSize: 16.0)
         label.text = place!.name
         return label
     }()
@@ -51,8 +44,9 @@ class NGPlaceDetailViewController: UIViewController {
     private lazy var addressLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
-        label.textColor = .label
+        label.textColor = .black
         label.text = place!.location.formatted_address
+        label.font = UIFont.boldSystemFont(ofSize: 16.0)
         label.numberOfLines = 3
         return label
     }()
@@ -60,19 +54,26 @@ class NGPlaceDetailViewController: UIViewController {
     private lazy var tipsLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
-        label.textColor = .label
+        label.textColor = .black
         
         //Assigning label text with ALL tips
-        var tipsStr = ""
-        for tip in tips! {
-            tipsStr += "\(tip.text) \n"
+        var tipsStr = "Some Tips: \n"
+        if let placeTips = tips {
+            for tip in placeTips {
+                tipsStr += "\(tip.text) \n\n"
+            }
         }
         label.text = tipsStr
         
-        label.numberOfLines = 3
+        label.numberOfLines = 16
         return label
     }()
     
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.backgroundColor = .white
+        return scrollView
+    }()
     
     private lazy var mapView: MKMapView = {
         let mv = MKMapView()
@@ -95,6 +96,12 @@ class NGPlaceDetailViewController: UIViewController {
         
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        self.scrollView.contentSize.height = self.view.frame.height + 1000
+    }
+    
+    
 }
 
 private extension NGPlaceDetailViewController {
@@ -114,16 +121,16 @@ private extension NGPlaceDetailViewController {
         
         self.view.addSubview(containerView)
         containerView.addSubview(mapView)
-        containerView.addSubview(imageView)
-        containerView.addSubview(nameLabel)
-        containerView.addSubview(addressLabel)
-        containerView.addSubview(tipsLabel)
+        containerView.addSubview(scrollView)
+        scrollView.addSubview(nameLabel)
+        scrollView.addSubview(addressLabel)
+        scrollView.addSubview(tipsLabel)
         
     }
     
     private func setupLayouts() {
         containerView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         addressLabel.translatesAutoresizingMaskIntoConstraints = false
         tipsLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -143,40 +150,53 @@ private extension NGPlaceDetailViewController {
         NSLayoutConstraint.activate([
             mapView.topAnchor.constraint(equalTo: containerView.topAnchor),
             mapView.heightAnchor.constraint(equalToConstant: 200.0),
-            mapView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8.0),
-            mapView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: 8.0)
+            mapView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            mapView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
         ])
         
-        // Layout constraints for imageView
+        // Layout constraints for scrollview
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: mapView.bottomAnchor),
-            imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            imageView.heightAnchor.constraint(equalToConstant: Constants.imageHeight)
+            scrollView.topAnchor.constraint(equalTo: mapView.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constants.horizontalPadding),
+            scrollView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constants.horizontalPadding),
+            scrollView.bottomAnchor.constraint(equalTo: margins.bottomAnchor)
+        ])
+       
+        //Set heights for scrollview content
+        NSLayoutConstraint.activate([
+            nameLabel.heightAnchor.constraint(equalToConstant: 50),
+            addressLabel.heightAnchor.constraint(equalToConstant: 50),
+            tipsLabel.heightAnchor.constraint(equalToConstant: 300),
         ])
 
-        // Layout constraints for nameLabel
+        //Set widths for scrollview content
         NSLayoutConstraint.activate([
-            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: Constants.placeVerticalPadding),
-            nameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constants.horizontalPadding),
-            nameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constants.horizontalPadding)
-            
+            nameLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            addressLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            tipsLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
         ])
 
-        // Layout constraints for addressLabel
+        //Set leading and trailing margins for scrollview content
         NSLayoutConstraint.activate([
-            addressLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 6.0),
-            addressLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constants.horizontalPadding),
-            addressLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constants.horizontalPadding),
-           
+            nameLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            addressLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            tipsLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            nameLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            addressLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            tipsLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
         ])
-        
-        // Layout constraints for tipsLabel
+
+        //Set top margins for scrollview content
         NSLayoutConstraint.activate([
-            tipsLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 16.0),
-            tipsLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: Constants.horizontalPadding),
-            tipsLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -Constants.horizontalPadding),
+            nameLabel.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 8.0),
+            addressLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 20.0),
+            tipsLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 20.0),
         ])
+
+        NSLayoutConstraint.activate([
+            tipsLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -8.0),
+        ])
+
     }
 }
 
