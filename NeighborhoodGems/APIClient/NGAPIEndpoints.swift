@@ -13,6 +13,7 @@ enum APIs {
         //ENDPOINTS
         case getPlaces
         case getPlaceTips(id: String)
+        case getPlaceImage(id: String)
 
         //REQUEST URL, HTTP Methods, Headers, & Optional Data
         static let baseURL = URL(string: "https://api.foursquare.com/v3/places")!
@@ -26,19 +27,20 @@ enum APIs {
             switch self {
             case .getPlaces: return "/search"
             case .getPlaceTips(let id): return "/\(id)/tips"
+            case .getPlaceImage(let id): return "/\(id)/photos"
             }
         }
         
         var httpMethod: String {
             switch self {
-            case .getPlaces, .getPlaceTips:
+            case .getPlaces, .getPlaceTips, .getPlaceImage:
                 return "GET"
             }
         }
         
         var headers: [String: Any]? {
             switch self {
-            case .getPlaces, .getPlaceTips:
+            case .getPlaces, .getPlaceTips, .getPlaceImage:
                 return ["Accept": "application/json",
                         "Authorization": apiKey
                 ]
@@ -47,7 +49,7 @@ enum APIs {
         
         var body: NSMutableData? {
             switch self {
-            case .getPlaces, .getPlaceTips:
+            case .getPlaces, .getPlaceTips, .getPlaceImage:
                 return nil
             }
         }

@@ -16,7 +16,7 @@ class NGTabBarController: UITabBarController {
         
     }
     
-    ///Configuring TabBar and individual tabs
+    ///Embedding our view controllers that is within a tab bar in a nagivation controller of its own
     private func setUpTabs() {
         //Create instances of view controllers to be attached later
         let placeListVC = NGPlaceListViewController()

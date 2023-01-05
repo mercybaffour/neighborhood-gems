@@ -62,10 +62,10 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
     }()
     
     private lazy var citySearchField: UITextField = {
-        var textField = UITextField()
+        var textField = UITextField(frame: CGRect(x: 16, y: 260, width: UIScreen.main.bounds.size.width - 32, height: 40))
         textField.loadDropdown(options: NGDataManager.shared.cities)
         textField.setBaseStyling()
-        textField.attributedPlaceholder = NSAttributedString(string: "Enter City Destination", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
+        textField.attributedPlaceholder = NSAttributedString(string: "Select City Destination", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
         let searchIcon = UIImageView.init(frame: CGRect.init(x: 10, y: 10, width: 20, height: 20))
         searchIcon.image = UIImage.init(systemName: "house")
         searchIcon.tintColor = .black
@@ -277,26 +277,25 @@ extension NGPlaceListViewController: UICollectionViewDataSource {
     
     //Returns a new cell with customizations
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        //Populating cell with place data
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! NGListCollectionViewCell
         let place = placeDataSource[indexPath.item]
         cell.populate(with: place)
         
-        let photoImage = UIImage(named: "mountainsilhouette.jpeg")
-        cell.setImage(image: photoImage)
-        
-        
-        /*let imageURL = "https://api.foursquare.com/v3/places/\(place.fsq_id)/photos"
-        NGAPIService.getImage(imageUrl: imageURL, completion: { (success, imageData) in
-            print("I'm in cell for item at")
+        //Setting cell with place image
+        NGAPIService.getPlaceImage(id: place.fsq_id, completion: { (success, imageData) in
             if success, let imageData = imageData,
                 let photo = UIImage(data: imageData) {
                 DispatchQueue.main.async {
                     cell.setImage(image: photo)
                 }
+            } else {
+                let photoImage = UIImage(named: "mountainsilhouette.jpeg")
+                DispatchQueue.main.async {
+                    cell.setImage(image: photoImage)
+                }
             }
         })
-         */
-        
         
         return cell
     }

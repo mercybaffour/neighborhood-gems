@@ -77,15 +77,18 @@ class NGPlaceDetailViewController: UIViewController {
     private lazy var mapView: MKMapView = {
         let mv = MKMapView()
         let center = CLLocationCoordinate2D(latitude: place!.geocodes.main.latitude, longitude: place!.geocodes.main.longitude)
-        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
-        mv.setRegion(region, animated: true)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = center
+        annotation.title = "\(place!.name)"
+        let coordinateRegion = MKCoordinateRegion(center: annotation.coordinate, latitudinalMeters: 800, longitudinalMeters: 800)
+        mv.setRegion(coordinateRegion, animated: true)
+        mv.addAnnotation(annotation)
         return mv
     }()
     
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        //view.backgroundColor = .systemMint
         mapView.delegate = self
         setupViews()
         setupLayouts()

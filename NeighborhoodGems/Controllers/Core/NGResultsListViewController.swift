@@ -150,12 +150,23 @@ extension NGResultsListViewController: UICollectionViewDataSource {
     
     //Returns a new cell with customizations
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        //Populating cell with place data
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! NGListCollectionViewCell
         let place = placeDataSource[indexPath.item]
         cell.populate(with: place)
         
-        let photoImage = UIImage(named: "mountainsilhouette.jpeg")
-        cell.setImage(image: photoImage)
+        //Setting cell with place image
+        NGAPIService.getPlaceImage(id: place.fsq_id, completion: { (success, imageData) in
+            if success, let imageData = imageData,
+                let photo = UIImage(data: imageData) {
+                DispatchQueue.main.async {
+                    cell.setImage(image: photo)
+                }
+            } else {
+                let photoImage = UIImage(named: "mountainsilhouette.jpeg")
+                cell.setImage(image: photoImage)
+            }
+        })
         
         return cell
     }

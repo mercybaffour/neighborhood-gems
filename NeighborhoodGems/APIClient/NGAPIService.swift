@@ -22,6 +22,9 @@ class NGAPIService {
                 case .getPlaceTips:
                     let url = APIs.Foursquare.getPlaceTips(id: id!).url
                     return url
+                case .getPlaceImage:
+                    let url = APIs.Foursquare.getPlaceImage(id: id!).url
+                    return url
             }
         }
        
@@ -147,7 +150,52 @@ class NGAPIService {
         }
         task.resume()
     }
-   
+    
+    ///Making Network Call to "getPlacePhotos" endpoint
+    static func getPlaceImage(id: String, completion: @escaping (Bool, Data?) -> Void) {
+        let userEndpoint = APIs.Foursquare.getPlaceImage(id: id)
+        let request = createFoursquareRequest(endpoint: userEndpoint, id: id)
+
+        let session = URLSession(configuration: .default)
+        let task = session.dataTask(with: request) { data, response, error in
+            guard
+                let data = data,                              // data?
+                error == nil                                  // no error?
+            else {
+                completion(false, nil)
+                return
+            }
+            
+            
+            do {
+                let responseJSON = try JSONSerialization.jsonObject(with: data, options: []) as? [AnyObject]
+                if responseJSON!.isEmpty {
+                    completion(false, nil)
+                    return
+                }
+                
+                if let responseObj = responseJSON![0] as? [String: Any] {
+                    //Assembling photo URL
+                    let prefix = responseObj["prefix"] as? String
+                    let suffix = responseObj["suffix"] as? String
+                    let combinedURL = "\(prefix!)300x300\(suffix!)"
+                    
+                    //Constructing a data object with the data from the location specified by the photo URL.
+                    let url = URL(string: combinedURL)
+                    let data = try? Data(contentsOf: url!)
+                    
+                    completion(true, data)
+                } else {
+                    completion(false, nil)
+                }
+            } catch let jsonError {
+                print(jsonError)
+            }
+          
+        }
+        task.resume()
+    }
+     
     // MARK: PredictHQ API Requests
     
     ///Creating a  base network request
@@ -218,41 +266,6 @@ class NGAPIService {
         task.resume()
     }
     
-    /*
-    //Requesting, then serving actual images
-    static func getImage(imageUrl: String, completion: @escaping (Bool, Data?) -> Void) {
-        //Headers
-        let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String
-        let headers = ["Accept": "application/json", "Authorization": apiKey!]
-        
-        //Creating request
-        let components = URLComponents(string: imageUrl)!
-        var request = URLRequest(url: components.url!)
-        request.httpMethod = "GET"
-        request.allHTTPHeaderFields = headers
-        
-        let session = URLSession(configuration: .default)
-        print("im in image call")
-        
-        let task = session.dataTask(with: request) { (data, response, error) in
-            if let data = data, error == nil,
-               let response = response as? HTTPURLResponse, response.statusCode == 200,
-               let responseJSON = try? JSONSerialization.jsonObject(with: data, options: []) as? [AnyObject], let responseObj = responseJSON[0] as? [String: Any] {
-                    let prefix = responseObj["prefix"] as? String
-                    let suffix = responseObj["suffix"] as? String
-                    let combinedURL = "\(prefix!.dropLast())\(suffix!)"
-                    print(combinedURL)
-                    let url = URL(string: combinedURL)
-                    let data = try? Data(contentsOf: url!)
-                    
-                    completion(true, data)
-            }
-            else {
-                completion(false, nil)
-            }
-        }
-        task.resume()
-        
-    }
-     */
+    
+    
 }
