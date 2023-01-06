@@ -12,8 +12,11 @@ class NGResultsListViewController: UIViewController {
     //MARK: Management
     //User's api search results to populate our grid view
     var placeDataSource: [NGPlace] {
-        return NGDataManager.shared.searchResultsList
+        return NGDataHelper.shared.searchResultsList
     }
+    
+    //Based on this result, our view will show a "no data" alert when false or a collection view when true
+    var hasDataSource: Bool = true
     
     // MARK: - UI
     private lazy var neighborhoodLabel: UILabel = {
@@ -42,6 +45,7 @@ class NGResultsListViewController: UIViewController {
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        displayAlertOnNoPlaceResults()
         setupViews()
     }
     
@@ -79,31 +83,41 @@ extension NGResultsListViewController {
        
     }
     
+    ///When view loads, if the previous search produces no results, display popup alert
+    private func displayAlertOnNoPlaceResults() {
+        if placeDataSource.isEmpty {
+            hasDataSource = false
+            self.displayNoDataAlert(title: "We apologize...", message: "We don't have any data based on your category and/or city destination search. Please try again.")
+        }
+    }
+    
    /// API Call to fetch place details
     private func loadPlaceDetail(with place: NGPlace) {
         NGAPIService.getPlaceTips(id: place.fsq_id) { (success, response) in
             
             if success, let response = response {
-                NGDataManager.shared.placeTips = response
+                NGDataHelper.shared.placeTips = response
                 
                 DispatchQueue.main.async {
-                    self.navigationController?.pushViewController(NGPlaceDetailViewController(place: place, tips: NGDataManager.shared.placeTips), animated: true)
+                    self.navigationController?.pushViewController(NGPlaceDetailViewController(place: place, tips: NGDataHelper.shared.placeTips), animated: true)
                 }
             }
             else {
-                
                 // show no data alert
-                self.displayNoDataAlert(title: "We apologize...", message: "No places to display =(")
-                
+                self.displayNoDataAlert(title: "We apologize...", message: "We do not have any details for this place.")
             }
-            
         }
     }
     
     private func displayNoDataAlert(title: String?, message: String?) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
-        let dismissAction = UIAlertAction(title: "Okay", style: .cancel, handler: { (action) -> Void in
+        let dismissAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) -> Void in
+            if self.hasDataSource == false {
+                DispatchQueue.main.async {
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
         })
         
         alertController.addAction(dismissAction)
@@ -156,7 +170,7 @@ extension NGResultsListViewController: UICollectionViewDataSource {
         let place = placeDataSource[indexPath.item]
         cell.populate(with: place)
         
-        //Setting cell with place image
+        //Setting cell with place image from external api, or if there's none, a default image
         NGAPIService.getPlaceImage(id: place.fsq_id, completion: { (success, imageData) in
             if success, let imageData = imageData,
                 let photo = UIImage(data: imageData) {
@@ -165,7 +179,9 @@ extension NGResultsListViewController: UICollectionViewDataSource {
                 }
             } else {
                 let photoImage = UIImage(named: "mountainsilhouette.jpeg")
-                cell.setImage(image: photoImage)
+                DispatchQueue.main.async {
+                    cell.setImage(image: photoImage)
+                }
             }
         })
         

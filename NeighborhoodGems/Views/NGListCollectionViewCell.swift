@@ -14,7 +14,6 @@ class NGListCollectionViewCell: UICollectionViewCell {
         static let contentViewCornerRadius: CGFloat = 4.0
         static let imageWidth: CGFloat = 160.0
         static let imageHeight: CGFloat = 100.0
-
         static let verticalSpacing: CGFloat = 8.0
         static let horizontalPadding: CGFloat = 16.0
         static let placeVerticalPadding: CGFloat = 64.0
@@ -59,6 +58,7 @@ class NGListCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //Populate each cell with data coming from the placesList in NGDataHelper
     func populate(with place: NGPlace) {
         nameLabel.text = place.name
         addressLabel.text = place.location.formatted_address

@@ -16,7 +16,7 @@
 		831062DE295BF456008A7BA8 /* NGResultsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062DD295BF456008A7BA8 /* NGResultsListViewController.swift */; };
 		831062E0295BF46E008A7BA8 /* NGPlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062DF295BF46E008A7BA8 /* NGPlaceDetailViewController.swift */; };
 		831062E2295BF4D0008A7BA8 /* NGAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062E1295BF4D0008A7BA8 /* NGAPIService.swift */; };
-		831062E4295BF4DD008A7BA8 /* NGDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062E3295BF4DD008A7BA8 /* NGDataManager.swift */; };
+		831062E4295BF4DD008A7BA8 /* NGDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062E3295BF4DD008A7BA8 /* NGDataHelper.swift */; };
 		831062E8295C08A9008A7BA8 /* NGPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062E7295C08A9008A7BA8 /* NGPlace.swift */; };
 		831062F3295CD210008A7BA8 /* NGCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062F2295CD210008A7BA8 /* NGCategory.swift */; };
 		831062F5295CD254008A7BA8 /* NGLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831062F4295CD254008A7BA8 /* NGLocation.swift */; };
@@ -30,7 +30,7 @@
 		836BAB7129649B5D00A3870A /* NGEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB7029649B5D00A3870A /* NGEventsViewController.swift */; };
 		836BAB752964B46A00A3870A /* NGEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB742964B46A00A3870A /* NGEvent.swift */; };
 		836BAB772964BAEC00A3870A /* NGEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB762964BAEC00A3870A /* NGEvents.swift */; };
-		836BAB792964F4F100A3870A /* NGLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB782964F4F100A3870A /* NGLocationManager.swift */; };
+		836BAB792964F4F100A3870A /* NGLocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB782964F4F100A3870A /* NGLocationHelper.swift */; };
 		836BAB7B2966233F00A3870A /* NGAPIEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB7A2966233F00A3870A /* NGAPIEndpoints.swift */; };
 		836BAB7D2966250400A3870A /* NGAPIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB7C2966250400A3870A /* NGAPIRequest.swift */; };
 /* End PBXBuildFile section */
@@ -47,7 +47,7 @@
 		831062DD295BF456008A7BA8 /* NGResultsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGResultsListViewController.swift; sourceTree = "<group>"; };
 		831062DF295BF46E008A7BA8 /* NGPlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGPlaceDetailViewController.swift; sourceTree = "<group>"; };
 		831062E1295BF4D0008A7BA8 /* NGAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGAPIService.swift; sourceTree = "<group>"; };
-		831062E3295BF4DD008A7BA8 /* NGDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGDataManager.swift; sourceTree = "<group>"; };
+		831062E3295BF4DD008A7BA8 /* NGDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGDataHelper.swift; sourceTree = "<group>"; };
 		831062E6295C0060008A7BA8 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		831062E7295C08A9008A7BA8 /* NGPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGPlace.swift; sourceTree = "<group>"; };
 		831062F2295CD210008A7BA8 /* NGCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGCategory.swift; sourceTree = "<group>"; };
@@ -62,7 +62,7 @@
 		836BAB7029649B5D00A3870A /* NGEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGEventsViewController.swift; sourceTree = "<group>"; };
 		836BAB742964B46A00A3870A /* NGEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGEvent.swift; sourceTree = "<group>"; };
 		836BAB762964BAEC00A3870A /* NGEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGEvents.swift; sourceTree = "<group>"; };
-		836BAB782964F4F100A3870A /* NGLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGLocationManager.swift; sourceTree = "<group>"; };
+		836BAB782964F4F100A3870A /* NGLocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGLocationHelper.swift; sourceTree = "<group>"; };
 		836BAB7A2966233F00A3870A /* NGAPIEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGAPIEndpoints.swift; sourceTree = "<group>"; };
 		836BAB7C2966250400A3870A /* NGAPIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGAPIRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -148,7 +148,7 @@
 		831062D9295BF2C6008A7BA8 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				831062ED295CC447008A7BA8 /* Managers */,
+				831062ED295CC447008A7BA8 /* Helpers */,
 				831062DA295BF2D3008A7BA8 /* Core */,
 			);
 			path = Controllers;
@@ -166,13 +166,13 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
-		831062ED295CC447008A7BA8 /* Managers */ = {
+		831062ED295CC447008A7BA8 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				831062E3295BF4DD008A7BA8 /* NGDataManager.swift */,
-				836BAB782964F4F100A3870A /* NGLocationManager.swift */,
+				831062E3295BF4DD008A7BA8 /* NGDataHelper.swift */,
+				836BAB782964F4F100A3870A /* NGLocationHelper.swift */,
 			);
-			path = Managers;
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		836BAB6929636EE500A3870A /* Views */ = {
@@ -256,7 +256,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				836BAB7D2966250400A3870A /* NGAPIRequest.swift in Sources */,
-				831062E4295BF4DD008A7BA8 /* NGDataManager.swift in Sources */,
+				831062E4295BF4DD008A7BA8 /* NGDataHelper.swift in Sources */,
 				836BAB7129649B5D00A3870A /* NGEventsViewController.swift in Sources */,
 				831062E0295BF46E008A7BA8 /* NGPlaceDetailViewController.swift in Sources */,
 				831062C7295BF1D5008A7BA8 /* NGTabBarController.swift in Sources */,
@@ -274,7 +274,7 @@
 				836BAB772964BAEC00A3870A /* NGEvents.swift in Sources */,
 				836BAB6D29636FEE00A3870A /* NGPickerView.swift in Sources */,
 				8359DC7E2961E53300C6E14F /* NGPlaceTip.swift in Sources */,
-				836BAB792964F4F100A3870A /* NGLocationManager.swift in Sources */,
+				836BAB792964F4F100A3870A /* NGLocationHelper.swift in Sources */,
 				831062E2295BF4D0008A7BA8 /* NGAPIService.swift in Sources */,
 				836BAB752964B46A00A3870A /* NGEvent.swift in Sources */,
 				831062DC295BF439008A7BA8 /* NGPlaceListViewController.swift in Sources */,

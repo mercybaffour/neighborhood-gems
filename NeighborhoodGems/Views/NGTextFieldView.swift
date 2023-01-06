@@ -9,7 +9,8 @@ import UIKit
 
 extension UITextField {
     
-    func loadDropdown(options: [String]) {
+    //Creating a picker - dropDown list for each search text field
+    func loadDropdown(options: [String]) { //our options come from NGDataHelper: either categories or cities
         self.inputView = NGPickerView(pickerOptions: options, pickerTextField: self)
     }
     

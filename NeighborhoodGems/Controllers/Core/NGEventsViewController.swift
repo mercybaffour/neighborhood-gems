@@ -11,11 +11,11 @@ class NGEventsViewController: UIViewController {
     //MARK: Management
     //Provides data to populate our grid view
     var eventsDataSource: [NGEvent] {
-        return NGDataManager.shared.eventsList
+        return NGDataHelper.shared.eventsList
     }
     
     //To manage user's current location
-    var locationService = NGLocationManager()
+    var locationService = NGLocationHelper()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,14 +32,14 @@ extension NGEventsViewController {
         NGAPIService.getEvents(ll: ll) { (success, list) in
             
             if success, let list = list {
-                NGDataManager.shared.eventsList = list
+                NGDataHelper.shared.eventsList = list
                 
                 DispatchQueue.main.async {
-                    print(NGDataManager.shared.eventsList)
+                    print(NGDataHelper.shared.eventsList)
                 }
             } else {
                 // show no data alert
-                self.displayNoDataAlert(title: "We apologize...", message: "No events to display =(")
+                self.displayNoDataAlert(title: "We apologize...", message: "Server Error: We do not have any upcoming events.")
             }
             
         }
@@ -55,7 +55,7 @@ extension NGEventsViewController {
     private func displayNoDataAlert(title: String?, message: String?) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
-        let dismissAction = UIAlertAction(title: "Okay", style: .cancel, handler: { (action) -> Void in
+        let dismissAction = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) -> Void in
         })
         
         alertController.addAction(dismissAction)

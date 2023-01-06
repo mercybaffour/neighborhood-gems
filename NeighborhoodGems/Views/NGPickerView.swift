@@ -7,6 +7,7 @@
 import Foundation
 import UIKit
 
+//Our custom picker - a dropdown list for each search text field
 class NGPickerView: UIPickerView, UIPickerViewDataSource, UIPickerViewDelegate {
 
     var pickerOptions : [String]!
@@ -42,6 +43,7 @@ class NGPickerView: UIPickerView, UIPickerViewDataSource, UIPickerViewDelegate {
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        //number of rows will reflect options coming from NGDataHelper: either categories.count or cities.count
         return pickerOptions.count
     }
  

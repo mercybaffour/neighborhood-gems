@@ -8,7 +8,7 @@ import Foundation
 
 enum APIs {
     
-    //MARK: Namespace for Foursquare API
+    //MARK: Namespace Section for Foursquare API
     enum Foursquare: RawRepresentable, NGAPIRequest {
         //ENDPOINTS
         case getPlaces
@@ -23,13 +23,14 @@ enum APIs {
             return apiKey!
         }
 
+        
         var rawValue: String {
             switch self {
             case .getPlaces: return "/search"
             case .getPlaceTips(let id): return "/\(id)/tips"
             case .getPlaceImage(let id): return "/\(id)/photos"
             }
-        }
+        } //These raw values are for any required path components that need to get appended to the endpoint url. This is made possible by our extension below
         
         var httpMethod: String {
             switch self {
@@ -55,7 +56,7 @@ enum APIs {
         }
     }
     
-    //MARK: Namespace for PredictHQ API
+    //MARK: Namespace Section for PredictHQ API
     enum PredictHQ: RawRepresentable, NGAPIRequest {
         //ENDPOINTS
         case getEvents
@@ -68,11 +69,12 @@ enum APIs {
             return apiToken!
         }
         
+        
         var rawValue: String {
             switch self {
             case .getEvents: return "events/"
             }
-        }
+        } //This raw value is for any required path components that need to get appended to the endpoint url. This is made possible by our extension below
         
         var httpMethod: String {
             switch self {

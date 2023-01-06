@@ -68,6 +68,7 @@ class NGAPIService {
                 return
             }
             
+            //Initializing a list to store our API results
             var list = [NGPlace]()
             
             do {
@@ -78,7 +79,7 @@ class NGAPIService {
                 print(jsonError)
             }
             
-            //Means we have successfully collected all data objects into a list
+            //Means we have successfully collected all data objects into a list and this list will be assigned to our placesList in NGDataHelper
             completion(true, list)
         }
         task.resume()
@@ -102,6 +103,7 @@ class NGAPIService {
                 return
             }
             
+            //Initializing an empty list to store our API results
             var list = [NGPlace]()
             
             do {
@@ -112,7 +114,7 @@ class NGAPIService {
                 print(jsonError)
             }
             
-            //Means we have successfully collected all data objects into a list
+            //Means we have successfully collected all data objects into a list and this list will be assigned to our searchResultsList in NGDataHelper
             completion(true, list)
         }
         task.resume()
@@ -140,7 +142,7 @@ class NGAPIService {
             do {
                 let jsonDecoder = JSONDecoder()
                 let decodedResponse = try jsonDecoder.decode([NGPlaceTip].self, from: data)
-                //Means we have successfully collected all data objects into a list
+                //Means we have successfully collected a data object for the relevant place
                 completion(true, decodedResponse)
             } catch let jsonError {
                 print(jsonError)
@@ -184,6 +186,7 @@ class NGAPIService {
                     let url = URL(string: combinedURL)
                     let data = try? Data(contentsOf: url!)
                     
+                    //Means we have succesfully constructed a data object and this object will be used to set the images in our collectionViews of our view controllers
                     completion(true, data)
                 } else {
                     completion(false, nil)
@@ -260,12 +263,9 @@ class NGAPIService {
                 print(jsonError)
             }
             
-            //Means we have successfully collected all data objects into a list
+            //Means we have successfully collected all data objects into a list and will assign it to eventsList in NGDataHelper
             completion(true, list)
         }
         task.resume()
     }
-    
-    
-    
 }

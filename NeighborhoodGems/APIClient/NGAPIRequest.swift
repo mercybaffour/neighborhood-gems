@@ -6,6 +6,7 @@
 
 import Foundation
 
+///Creating a standardized HTTP request format that all endpoints should naturally abide by
 protocol NGAPIRequest {
     
     static var baseURL: URL { get }

@@ -7,7 +7,8 @@
 import Foundation
 import CoreLocation
 
-class NGLocationManager: NSObject, CLLocationManagerDelegate {
+//Our helper class to help manage user's location updates and authorization
+class NGLocationHelper: NSObject, CLLocationManagerDelegate {
     
     var locationManager : CLLocationManager!
 
@@ -23,6 +24,7 @@ class NGLocationManager: NSObject, CLLocationManagerDelegate {
         locationManager.startUpdatingLocation()
     }
     
+    //To help inform us of initial location authorization status and any changes
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
             case .denied:
@@ -43,6 +45,7 @@ class NGLocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        //Logging the most recent, current location
         guard let currentLocation = locations.last else {return}
         print(currentLocation)
     }
