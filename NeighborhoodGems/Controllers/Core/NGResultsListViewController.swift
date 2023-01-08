@@ -38,7 +38,7 @@ class NGResultsListViewController: UIViewController {
         let cv = UICollectionView(frame: self.view.frame, collectionViewLayout: self.layout)
         cv.translatesAutoresizingMaskIntoConstraints = false
         cv.backgroundColor = .clear
-        cv.register(NGListCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        cv.register(NGPlaceListCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         return cv
     }()
     
@@ -166,7 +166,7 @@ extension NGResultsListViewController: UICollectionViewDataSource {
     //Returns a new cell with customizations
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //Populating cell with place data
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! NGListCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! NGPlaceListCollectionViewCell
         let place = placeDataSource[indexPath.item]
         cell.populate(with: place)
         

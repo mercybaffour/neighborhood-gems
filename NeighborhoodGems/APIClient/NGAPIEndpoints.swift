@@ -56,23 +56,17 @@ enum APIs {
         }
     }
     
-    //MARK: Namespace Section for PredictHQ API
-    enum PredictHQ: RawRepresentable, NGAPIRequest {
+    //MARK: Namespace Section for Ticketmaster API
+    enum Ticketmaster: RawRepresentable, NGAPIRequest {
         //ENDPOINTS
         case getEvents
         
         //REQUEST URL, HTTP Methods, Headers, & Optional Data
-        static let baseURL = URL(string: "https://api.predicthq.com/v1/" )!
-        
-        var apiToken: String {
-            let apiToken = Bundle.main.infoDictionary?["API_TOKEN"] as? String
-            return apiToken!
-        }
-        
+        static let baseURL = URL(string: "https://app.ticketmaster.com/discovery/v2/" )!
         
         var rawValue: String {
             switch self {
-            case .getEvents: return "events/"
+            case .getEvents: return "events.json"
             }
         } //This raw value is for any required path components that need to get appended to the endpoint url. This is made possible by our extension below
         
@@ -83,12 +77,11 @@ enum APIs {
             }
         }
         
+        
         var headers: [String: Any]? {
             switch self {
             case .getEvents:
-                return ["Accept": "application/json",
-                        "Authorization": "Bearer \(apiToken)"
-                ]
+                return nil
             }
         }
         

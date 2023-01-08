@@ -26,13 +26,14 @@
 		8359DC7E2961E53300C6E14F /* NGPlaceTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8359DC7D2961E53300C6E14F /* NGPlaceTip.swift */; };
 		836BAB6B29636F3900A3870A /* NGTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB6A29636F3900A3870A /* NGTextFieldView.swift */; };
 		836BAB6D29636FEE00A3870A /* NGPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB6C29636FEE00A3870A /* NGPickerView.swift */; };
-		836BAB6F2963822700A3870A /* NGListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB6E2963822700A3870A /* NGListCollectionViewCell.swift */; };
+		836BAB6F2963822700A3870A /* NGPlaceListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB6E2963822700A3870A /* NGPlaceListCollectionViewCell.swift */; };
 		836BAB7129649B5D00A3870A /* NGEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB7029649B5D00A3870A /* NGEventsViewController.swift */; };
 		836BAB752964B46A00A3870A /* NGEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB742964B46A00A3870A /* NGEvent.swift */; };
 		836BAB772964BAEC00A3870A /* NGEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB762964BAEC00A3870A /* NGEvents.swift */; };
 		836BAB792964F4F100A3870A /* NGLocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB782964F4F100A3870A /* NGLocationHelper.swift */; };
 		836BAB7B2966233F00A3870A /* NGAPIEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB7A2966233F00A3870A /* NGAPIEndpoints.swift */; };
 		836BAB7D2966250400A3870A /* NGAPIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB7C2966250400A3870A /* NGAPIRequest.swift */; };
+		836BAB83296A3A5400A3870A /* NGEventListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB82296A3A5400A3870A /* NGEventListCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,13 +59,14 @@
 		8359DC7D2961E53300C6E14F /* NGPlaceTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGPlaceTip.swift; sourceTree = "<group>"; };
 		836BAB6A29636F3900A3870A /* NGTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGTextFieldView.swift; sourceTree = "<group>"; };
 		836BAB6C29636FEE00A3870A /* NGPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGPickerView.swift; sourceTree = "<group>"; };
-		836BAB6E2963822700A3870A /* NGListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGListCollectionViewCell.swift; sourceTree = "<group>"; };
+		836BAB6E2963822700A3870A /* NGPlaceListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGPlaceListCollectionViewCell.swift; sourceTree = "<group>"; };
 		836BAB7029649B5D00A3870A /* NGEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGEventsViewController.swift; sourceTree = "<group>"; };
 		836BAB742964B46A00A3870A /* NGEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGEvent.swift; sourceTree = "<group>"; };
 		836BAB762964BAEC00A3870A /* NGEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGEvents.swift; sourceTree = "<group>"; };
 		836BAB782964F4F100A3870A /* NGLocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGLocationHelper.swift; sourceTree = "<group>"; };
 		836BAB7A2966233F00A3870A /* NGAPIEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGAPIEndpoints.swift; sourceTree = "<group>"; };
 		836BAB7C2966250400A3870A /* NGAPIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGAPIRequest.swift; sourceTree = "<group>"; };
+		836BAB82296A3A5400A3870A /* NGEventListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGEventListCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,7 +182,8 @@
 			children = (
 				836BAB6A29636F3900A3870A /* NGTextFieldView.swift */,
 				836BAB6C29636FEE00A3870A /* NGPickerView.swift */,
-				836BAB6E2963822700A3870A /* NGListCollectionViewCell.swift */,
+				836BAB6E2963822700A3870A /* NGPlaceListCollectionViewCell.swift */,
+				836BAB82296A3A5400A3870A /* NGEventListCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -268,7 +271,7 @@
 				831062C3295BF1D5008A7BA8 /* AppDelegate.swift in Sources */,
 				831062C5295BF1D5008A7BA8 /* SceneDelegate.swift in Sources */,
 				831062E8295C08A9008A7BA8 /* NGPlace.swift in Sources */,
-				836BAB6F2963822700A3870A /* NGListCollectionViewCell.swift in Sources */,
+				836BAB6F2963822700A3870A /* NGPlaceListCollectionViewCell.swift in Sources */,
 				831062F7295CD28F008A7BA8 /* NGGeocodes.swift in Sources */,
 				836BAB7B2966233F00A3870A /* NGAPIEndpoints.swift in Sources */,
 				836BAB772964BAEC00A3870A /* NGEvents.swift in Sources */,
@@ -278,6 +281,7 @@
 				831062E2295BF4D0008A7BA8 /* NGAPIService.swift in Sources */,
 				836BAB752964B46A00A3870A /* NGEvent.swift in Sources */,
 				831062DC295BF439008A7BA8 /* NGPlaceListViewController.swift in Sources */,
+				836BAB83296A3A5400A3870A /* NGEventListCollectionViewCell.swift in Sources */,
 				831062F3295CD210008A7BA8 /* NGCategory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

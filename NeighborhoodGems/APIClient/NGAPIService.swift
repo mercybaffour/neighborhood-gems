@@ -199,16 +199,16 @@ class NGAPIService {
         task.resume()
     }
      
-    // MARK: PredictHQ API Requests
+    // MARK: Ticketmaster API Requests
     
     ///Creating a  base network request
-    private static func createPredictHQRequest(endpoint: APIs.PredictHQ, params: [String: String]? = nil, id: String? = nil) -> URLRequest {
+    private static func createTicketmasterRequest(endpoint: APIs.Ticketmaster, params: [String: String]? = nil, id: String? = nil) -> URLRequest {
         
         // Get base url
         var url: URL {
             switch endpoint {
                 case .getEvents:
-                    let url = APIs.PredictHQ.getEvents.url
+                    let url = APIs.Ticketmaster.getEvents.url
                     return url
             }
         }
@@ -236,12 +236,13 @@ class NGAPIService {
     
     /// Making network call to "getEvents" endpoint
     static func getEvents(ll: String, completion: @escaping (Bool, [NGEvent]?) -> Void) {
+        let apiKey = Bundle.main.infoDictionary?["TM_API_KEY"] as? String
+            
+        let params = ["apikey": apiKey!, "latlong": ll]
+        let userEndpoint = APIs.Ticketmaster.getEvents
+        let request = createTicketmasterRequest(endpoint: userEndpoint, params: params)
         
-        let area = "50km@\(ll)"
-        let params = ["within": area]
-        let userEndpoint = APIs.PredictHQ.getEvents
-        let request = createPredictHQRequest(endpoint: userEndpoint, params: params)
-        
+        print(request)
         //Using URLSession class to manage HTTP session for this request
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { data, response, error in
@@ -257,12 +258,11 @@ class NGAPIService {
             
             do {
                 let jsonDecoder = JSONDecoder()
-                let decodedResponse = try jsonDecoder.decode(NGEvents.self, from: data)
-                list = decodedResponse.results
+                let decodedResponse = try jsonDecoder.decode(TicketMaster.self, from: data)
+                list = decodedResponse._embedded.events
             } catch let jsonError {
                 print(jsonError)
             }
-            
             //Means we have successfully collected all data objects into a list and will assign it to eventsList in NGDataHelper
             completion(true, list)
         }

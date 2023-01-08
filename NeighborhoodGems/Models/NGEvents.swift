@@ -7,6 +7,15 @@
 
 import Foundation
 
+typealias TicketMaster = NGEvents
+
 struct NGEvents: Codable {
-    var results: [NGEvent]
+    let _embedded: NGEventsEmbedded
 }
+
+struct NGEventsEmbedded: Codable {
+    var events: [NGEvent]
+}
+
+
+

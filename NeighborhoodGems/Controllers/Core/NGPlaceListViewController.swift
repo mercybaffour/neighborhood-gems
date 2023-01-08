@@ -80,7 +80,6 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
         let label = UILabel()
         label.font = UIFont(name: "Futura", size: 24.0)
         label.textAlignment = .center
-        //label.text = locationDenied ? "Community Centers in New York, NY" : "Places Nearby"
         label.textColor = .label
         return label
     }()
@@ -94,7 +93,7 @@ class NGPlaceListViewController: UIViewController, CLLocationManagerDelegate {
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
         cv.backgroundColor = .clear
-        cv.register(NGListCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        cv.register(NGPlaceListCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         return cv
     }()
     
@@ -308,7 +307,7 @@ extension NGPlaceListViewController: UICollectionViewDataSource {
     //Returns a new cell with customizations
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //Populating cell with place data
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! NGListCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! NGPlaceListCollectionViewCell
         let place = placeDataSource[indexPath.item]
         cell.populate(with: place)
         

@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 //Cell Prototype
-class NGListCollectionViewCell: UICollectionViewCell {
+class NGPlaceListCollectionViewCell: UICollectionViewCell {
     enum Constants {
         static let contentViewCornerRadius: CGFloat = 4.0
         static let imageWidth: CGFloat = 160.0
@@ -19,7 +19,7 @@ class NGListCollectionViewCell: UICollectionViewCell {
         static let placeVerticalPadding: CGFloat = 64.0
     }
     
-    //Placeholder id
+    //Placeholder id to be replaced with place id: this will allow us to fetch place details
     var id: String = {
         let id = Int.random(in: 1...10)
         return String(id)
