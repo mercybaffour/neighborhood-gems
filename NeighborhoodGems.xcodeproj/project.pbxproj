@@ -67,6 +67,7 @@
 		836BAB7A2966233F00A3870A /* NGAPIEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGAPIEndpoints.swift; sourceTree = "<group>"; };
 		836BAB7C2966250400A3870A /* NGAPIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGAPIRequest.swift; sourceTree = "<group>"; };
 		836BAB82296A3A5400A3870A /* NGEventListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGEventListCollectionViewCell.swift; sourceTree = "<group>"; };
+		836BAB88296B677100A3870A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +107,7 @@
 				831062D9295BF2C6008A7BA8 /* Controllers */,
 				831062D0295BF1D7008A7BA8 /* Info.plist */,
 				831062E6295C0060008A7BA8 /* Config.xcconfig */,
+				836BAB88296B677100A3870A /* README.md */,
 			);
 			path = NeighborhoodGems;
 			sourceTree = "<group>";
