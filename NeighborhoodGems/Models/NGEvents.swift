@@ -7,10 +7,14 @@
 
 import Foundation
 
-typealias TicketMaster = NGEvents
-
 struct NGEvents: Codable {
-    let _embedded: NGEventsEmbedded
+    
+    enum CodingKeys: String, CodingKey {
+        //We're mapping the following JSON key to abide by Swift property naming conventions
+        case embedded = "_embedded"
+    }
+    
+    let embedded: NGEventsEmbedded
 }
 
 struct NGEventsEmbedded: Codable {

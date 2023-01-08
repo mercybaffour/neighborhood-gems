@@ -36,7 +36,7 @@ class NGPlaceListCollectionViewCell: UICollectionViewCell {
     private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
-        label.textColor = .label
+        label.textColor = .orange
         return label
     }()
      
@@ -61,8 +61,8 @@ class NGPlaceListCollectionViewCell: UICollectionViewCell {
     //Populate each cell with data coming from the placesList in NGDataHelper
     func populate(with place: NGPlace) {
         nameLabel.text = place.name
-        addressLabel.text = place.location.formatted_address
-        self.id = place.fsq_id
+        addressLabel.text = place.location.formattedAddress
+        self.id = place.fsqId
     }
      
     func setImage(image: UIImage?) {

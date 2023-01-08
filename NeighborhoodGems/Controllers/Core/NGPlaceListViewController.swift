@@ -254,7 +254,7 @@ extension NGPlaceListViewController {
     
     /// API Call  to fetch the tips/details for each place
     private func loadPlaceDetail(with place: NGPlace) {
-        NGAPIService.getPlaceTips(id: place.fsq_id) { (success, response) in
+        NGAPIService.getPlaceTips(id: place.fsqId) { (success, response) in
             
             if success, let response = response {
                 NGDataHelper.shared.placeTips = response
@@ -312,7 +312,7 @@ extension NGPlaceListViewController: UICollectionViewDataSource {
         cell.populate(with: place)
         
         //Setting cell with place image from Foursquare API. If there's no associated image, a default image will be displayed in this cell
-        NGAPIService.getPlaceImage(id: place.fsq_id, completion: { (success, imageData) in
+        NGAPIService.getPlaceImage(id: place.fsqId, completion: { (success, imageData) in
             if success, let imageData = imageData,
                 let photo = UIImage(data: imageData) {
                 DispatchQueue.main.async {

@@ -104,7 +104,6 @@ extension NGEventsViewController {
                 
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
-                    print(NGDataHelper.shared.eventsList)
                 }
             } else {
                 // show no data alert

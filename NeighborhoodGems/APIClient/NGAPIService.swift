@@ -61,8 +61,10 @@ class NGAPIService {
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { data, response, error in
             guard
-                let data = data,                              // data?
-                error == nil                                  // no error?
+                let data = data,                                // data?
+                let response = response as? HTTPURLResponse,    // HTTP response?
+                200 ..< 300 ~= response.statusCode,             // status code in range 2xx?
+                error == nil                                    // no error?
             else {
                 completion(false, nil)
                 return
@@ -96,8 +98,10 @@ class NGAPIService {
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { data, response, error in
             guard
-                let data = data,                              // data?
-                error == nil                                  // no error?
+                let data = data,                                // data?
+                let response = response as? HTTPURLResponse,    // HTTP response?
+                200 ..< 300 ~= response.statusCode,             // status code in range 2xx?
+                error == nil                                    // no error?
             else {
                 completion(false, nil)
                 return
@@ -131,8 +135,10 @@ class NGAPIService {
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { data, response, error in
             guard
-                let data = data,                              // data?
-                error == nil                                  // no error?
+                let data = data,                                // data?
+                let response = response as? HTTPURLResponse,    // HTTP response?
+                200 ..< 300 ~= response.statusCode,             // status code in range 2xx?
+                error == nil                                    // no error?
             else {
                 completion(false, nil)
                 return
@@ -161,8 +167,10 @@ class NGAPIService {
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { data, response, error in
             guard
-                let data = data,                              // data?
-                error == nil                                  // no error?
+                let data = data,                                // data?
+                let response = response as? HTTPURLResponse,    // HTTP response?
+                200 ..< 300 ~= response.statusCode,             // status code in range 2xx?
+                error == nil                                    // no error?
             else {
                 completion(false, nil)
                 return
@@ -170,7 +178,7 @@ class NGAPIService {
             
             
             do {
-                let responseJSON = try JSONSerialization.jsonObject(with: data, options: []) as? [AnyObject]
+                let responseJSON = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [AnyObject]
                 if responseJSON!.isEmpty {
                     completion(false, nil)
                     return
@@ -242,13 +250,14 @@ class NGAPIService {
         let userEndpoint = APIs.Ticketmaster.getEvents
         let request = createTicketmasterRequest(endpoint: userEndpoint, params: params)
         
-        print(request)
         //Using URLSession class to manage HTTP session for this request
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: request) { data, response, error in
             guard
-                let data = data,                              // data?
-                error == nil                                  // no error?
+                let data = data,                                // data?
+                let response = response as? HTTPURLResponse,    // HTTP response?
+                200 ..< 300 ~= response.statusCode,             // status code in range 2xx?
+                error == nil                                    // no error?
             else {
                 completion(false, nil)
                 return
@@ -258,8 +267,11 @@ class NGAPIService {
             
             do {
                 let jsonDecoder = JSONDecoder()
-                let decodedResponse = try jsonDecoder.decode(TicketMaster.self, from: data)
-                list = decodedResponse._embedded.events
+                let decodedResponse = try jsonDecoder.decode(NGEvents.self, from: data)
+                
+                //Storing decoded response in our list and sorting by date chronologically
+                list = decodedResponse.embedded.events.sorted(by: { $0.dates.start.localDate.compare($1.dates.start.localDate) == .orderedAscending })
+    
             } catch let jsonError {
                 print(jsonError)
             }

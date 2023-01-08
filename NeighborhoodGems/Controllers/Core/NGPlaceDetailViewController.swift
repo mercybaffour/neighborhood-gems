@@ -45,7 +45,7 @@ class NGPlaceDetailViewController: UIViewController {
         let label = UILabel()
         label.backgroundColor = .clear
         label.textColor = .black
-        label.text = place!.location.formatted_address
+        label.text = place!.location.formattedAddress
         label.font = UIFont.boldSystemFont(ofSize: 16.0)
         label.numberOfLines = 3
         return label

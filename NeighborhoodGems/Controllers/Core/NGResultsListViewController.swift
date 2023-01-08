@@ -25,6 +25,7 @@ class NGResultsListViewController: UIViewController {
         label.text = getTopNeighborhoods()
         label.textAlignment = .center
         label.backgroundColor = .orange
+        label.numberOfLines = 3
         return label
     }()
     
@@ -93,7 +94,7 @@ extension NGResultsListViewController {
     
    /// API Call to fetch place details
     private func loadPlaceDetail(with place: NGPlace) {
-        NGAPIService.getPlaceTips(id: place.fsq_id) { (success, response) in
+        NGAPIService.getPlaceTips(id: place.fsqId) { (success, response) in
             
             if success, let response = response {
                 NGDataHelper.shared.placeTips = response
@@ -125,31 +126,34 @@ extension NGResultsListViewController {
     }
     
     ///Get most frequent neighborhoods listed in API call (getUserPlacesList)  results
-      private func getTopNeighborhoods() -> String {
-        //Initialize neighborhood frequency dictionary and result
-        var neighborhoodFrequencies: [String: Int] = [:]
+    private func getTopNeighborhoods() -> String {
         var result = ""
+        var neighborhoods: [[String]] = []
         
-        //Add each neighborhood's occurrence to dictionary
+        //For each place, add its corresponding neighborhood array to 'neighborhoods'
         for place in placeDataSource {
-            if let neighborhoods = place.location.neighborhood {
-                for neighborhood in neighborhoods {
-                    neighborhoodFrequencies[neighborhood] = (neighborhoodFrequencies[neighborhood] ?? 0) + 1
-                }
+            if let neighborhoodList = place.location.neighborhood {
+                neighborhoods.append(neighborhoodList)
             }
         }
         
-        //Find most frequent neighborhoods in dictionary using the max, map, and filter methods & store result(s)
-        if let topNeighborhoods = neighborhoodFrequencies.values.max()
-            .map(
-                
-                { maxValue in neighborhoodFrequencies.filter { $0.value == maxValue }.map { $0.key } } //filters dictionary based on max value & returns the associated keys in an array
-            )
-        {
-            result = topNeighborhoods.joined(separator: " | ")
+        //Build a dictionary of neighborhoodfrequencues
+        let neighborhoodCount = neighborhoods.reduce(into: [:]) { counts, neighborhood in
+            counts[neighborhood, default: 0] += 1
         }
         
-        return "Top Neighborhood(s): \(result)"
+        //The following lines of code account for cases when there are multiple top neighborhoods. We find the most frequent neighborhood(s) in our dictionary using the max, map, and filter methods & store the result(s)
+        if let topNeighborhoods = neighborhoodCount.values.max()
+            .map(
+                
+                { maxValue in neighborhoodCount.filter { $0.value == maxValue }.map { $0.key } } //filters dictionary based on max value & returns the associated keys in an array
+            )
+        {
+            //Flatten topNeighborhoods array and convert to string
+            result = topNeighborhoods.joined().joined(separator: " | ")
+        }
+        
+        return "Top Neighborhood(s):\n \(result)"
     }
 }
 
@@ -171,7 +175,7 @@ extension NGResultsListViewController: UICollectionViewDataSource {
         cell.populate(with: place)
         
         //Setting cell with place image from external api, or if there's none, a default image
-        NGAPIService.getPlaceImage(id: place.fsq_id, completion: { (success, imageData) in
+        NGAPIService.getPlaceImage(id: place.fsqId, completion: { (success, imageData) in
             if success, let imageData = imageData,
                 let photo = UIImage(data: imageData) {
                 DispatchQueue.main.async {

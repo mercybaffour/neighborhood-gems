@@ -77,7 +77,7 @@ class NGEventListCollectionViewCell: UICollectionViewCell {
     func populate(with event: NGEvent) {
         eventNameLabel.text = event.name
         eventDateLabel.text = event.dates.start.localDate
-        self.url = event.url!
+        self.url = event.url
         eventURLLabel.text = "Link to Event"
     }
     

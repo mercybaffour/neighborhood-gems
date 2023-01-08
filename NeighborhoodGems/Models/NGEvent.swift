@@ -7,9 +7,9 @@
 import Foundation
 
 struct NGEvent: Codable {
-    var name: String?
-    var id: String?
-    var url: String?
+    var name: String
+    var id: String
+    var url: String
     var dates: NGDates
 }
 
@@ -19,5 +19,5 @@ struct NGDates: Codable {
 }
 
 struct NGStart: Codable {
-    var localDate: String?
+    var localDate: String
 }
