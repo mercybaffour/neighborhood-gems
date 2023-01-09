@@ -2,7 +2,7 @@
 
 ### Project Description 
 
-    **NeighborhoodGems** is a neighborhood exploration tool for finding hidden gems and new neighborhood favorites. 
+    NeighborhoodGems is a neighborhood exploration tool for finding hidden gems and new neighborhood favorites. 
     This will be used to discover new and exciting places to visit in one’s area.
     
     When the app opens, the user will be prompted to authorize location services. 
@@ -20,15 +20,15 @@ _______
 
 ### Overview 
 
-    * **This iOS app implements two features: 1) Places, and 2) Events**
-        * **PLACES**
-            * **API Data Source: Foursquare API**
-            * **Controllers**
+    * This iOS app implements two features: 1) Places, and 2) Events
+        * PLACES
+            * API Data Source: Foursquare API
+            * Controllers
                 - A navigation controller
                 - A main view controller displaying search fields and a list of places
                 - A results view controller displaying search results and the top neighborhood(s)
                 - A view controller displaying more details for each selected place
-            * **Relevant Data Models**
+            * Relevant Data Models
                 - A place is represented with:
                     - id
                     - categories
@@ -42,12 +42,12 @@ _______
                     - id
                     - createdAt
                     - text
-        * **EVENTS**
-            * **API Data Source: Ticketmaster API**
-            * **Controllers**
+        * EVENTS
+            * API Data Source: Ticketmaster API
+            * Controllers
                 - A navigation controller
                 - A main view controller displaying events nearby
-            * **Relevant Data Models**
+            * Relevant Data Models
                 - An event is represented with:
                     - id
                     - name
@@ -58,8 +58,8 @@ _______
 
 ### Architectural Design 
 
-    * **Code Architecture**
-        * This app implements the **MVC design pattern**.
+    * Code Architecture
+        * This app implements the MVC design pattern.
         * To make this app scalable and extensible, the folder structure is divided into 5 main components:
             - SupportingFiles
             - APIClient
