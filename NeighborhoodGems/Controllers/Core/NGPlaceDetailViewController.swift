@@ -84,7 +84,28 @@ class NGPlaceDetailViewController: UIViewController {
         let coordinateRegion = MKCoordinateRegion(center: annotation.coordinate, latitudinalMeters: 800, longitudinalMeters: 800)
         mv.setRegion(coordinateRegion, animated: true)
         mv.addAnnotation(annotation)
+        mv.pointOfInterestFilter = MKPointOfInterestFilter(including: []) //show no POI
         return mv
+    }()
+    
+     private lazy var switchLabelView: UILabel = {
+        let label = UILabel()
+        label.text = "Points of Interest"
+        label.textColor = .white
+        label.backgroundColor = .darkGray
+        return label
+    }()
+    
+    private lazy var switchView: UISwitch = {
+        let switcher = UISwitch()
+        switcher.isOn = false
+        switcher.layer.masksToBounds = true
+        switcher.layer.borderColor = UIColor.gray.cgColor
+        switcher.layer.borderWidth = 2.0
+        switcher.layer.cornerRadius = 15
+        switcher.frame = CGRect(x: 100, y: 100, width: 50, height: 40)
+        switcher.addTarget(self , action: #selector(didPress), for: .valueChanged)
+        return switcher
     }()
     
     // MARK: Lifecycle
@@ -116,11 +137,26 @@ private extension NGPlaceDetailViewController {
         static let placeVerticalPadding: CGFloat = 8.0
     }
     
+    //Toggle color change and display of points of interest
+    @objc func didPress(sender: UISwitch) {
+            switch sender.isOn {
+            case true:
+                sender.backgroundColor = .green
+                let filters = MKPointOfInterestFilter(excluding: []) //explicitly include all POI
+                mapView.pointOfInterestFilter = .some(filters)
+            case false:
+                sender.backgroundColor = .clear
+                mapView.pointOfInterestFilter = MKPointOfInterestFilter(including: []) //show no POI
+            }
+    }
+    
     private func setupViews() {
         navigationItem.title = "Place Details"
         
         self.view.addSubview(containerView)
         containerView.addSubview(mapView)
+        containerView.addSubview(switchLabelView)
+        containerView.addSubview(switchView)
         containerView.addSubview(scrollView)
         scrollView.addSubview(nameLabel)
         scrollView.addSubview(addressLabel)
@@ -135,6 +171,8 @@ private extension NGPlaceDetailViewController {
         addressLabel.translatesAutoresizingMaskIntoConstraints = false
         tipsLabel.translatesAutoresizingMaskIntoConstraints = false
         mapView.translatesAutoresizingMaskIntoConstraints = false
+        switchLabelView.translatesAutoresizingMaskIntoConstraints = false
+        switchView.translatesAutoresizingMaskIntoConstraints = false
         
         let margins = view.layoutMarginsGuide
         
@@ -152,6 +190,20 @@ private extension NGPlaceDetailViewController {
             mapView.heightAnchor.constraint(equalToConstant: 200.0),
             mapView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+        ])
+        
+        //Layout constraints for switch label
+        NSLayoutConstraint.activate([
+            switchLabelView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 30.0),
+            switchLabelView.leadingAnchor.constraint(equalTo: margins.leadingAnchor, constant: 24.0),
+            switchLabelView.widthAnchor.constraint(equalToConstant: 130.0)
+        ])
+        
+        //Layout constraints for switch
+        NSLayoutConstraint.activate([
+            switchView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 25.0),
+            switchView.leadingAnchor.constraint(equalTo: switchLabelView.trailingAnchor, constant: 8.0),
+            switchView.trailingAnchor.constraint(equalTo: switchLabelView.trailingAnchor, constant: 55.0)
         ])
         
         // Layout constraints for scrollview

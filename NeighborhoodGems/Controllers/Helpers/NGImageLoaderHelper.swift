@@ -21,7 +21,6 @@ class NGImageLoaderHelper {
         //Checking initially to see if image has been cached using the place 'id' as key
         let key = id as NSString
         if let data = imageCache.object(forKey: key) {
-            print("Loading from cache: \(key)")
             completion(true, data as Data)
             return
         }
