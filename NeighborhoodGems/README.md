@@ -2,14 +2,17 @@
 
 ### Project Description
 
-    * NeighborhoodGems is a neighborhood exploration tool for finding hidden gems and new neighborhood favorites. This will be used to discover new and exciting places to visit in one’s area.
-    * When the app opens, the user will be prompted to authorize location services. If authorized, the user will be shown a list of interesting nearby places based on their current location, and if unauthorized, a default location. On the home page, the user can also search for places based on category (such as “Arts and Entertainment”) and a specific geocodable location. The app will use the search criteria to generate a list of places.
-    * One main feature is that the app will suggest a neighborhood(s) to visit based on the results. Additionally, for each place, the app will generate a map of the location and any optional tips about the location.
-    * Not only does this app help the user find places to go, but it also showcases events nearby based on a user’s location. Through the help of the Ticketmaster API, a link for more information about the event will be provided and help the user make informed decisions about any potential upcoming events.
+    NeighborhoodGems is a neighborhood exploration tool for finding hidden gems and new neighborhood favorites. This will be used to discover new and exciting places to visit in one’s area.
+    
+    When the app opens, the user will be prompted to authorize location services. If authorized, the user will be shown a list of interesting nearby places based on their current location, and if unauthorized, a default location. On the home page, the user can also search for places based on category (such as “Arts and Entertainment”) and a specific geocodable location. The app will use the search criteria to generate a list of places.
+    
+    One main feature is that the app will suggest a neighborhood(s) to visit based on the results. Additionally, for each place, the app will generate a map of the location and any optional tips about the location.
+    
+    Not only does this app help the user find places to go, but it also showcases events nearby based on a user’s location. Through the help of the Ticketmaster API, a link for more information about the event will be provided and help the user make informed decisions about any potential upcoming events.
 
 ### Overview
 
-    * This iOS app implemnents two features: 1) Places, and 2) Events
+    * This iOS app implements two features: 1) Places, and 2) Events
         * PLACES
             * API Data Source: Foursquare API
             * Controllers
