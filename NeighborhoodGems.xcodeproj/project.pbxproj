@@ -88,6 +88,7 @@
 		831062B6295BF1D5008A7BA8 = {
 			isa = PBXGroup;
 			children = (
+				836BAB88296B677100A3870A /* README.md */,
 				831062C1295BF1D5008A7BA8 /* NeighborhoodGems */,
 				831062C0295BF1D5008A7BA8 /* Products */,
 			);
@@ -111,7 +112,6 @@
 				831062D9295BF2C6008A7BA8 /* Controllers */,
 				831062D0295BF1D7008A7BA8 /* Info.plist */,
 				831062E6295C0060008A7BA8 /* Config.xcconfig */,
-				836BAB88296B677100A3870A /* README.md */,
 			);
 			path = NeighborhoodGems;
 			sourceTree = "<group>";
@@ -167,7 +167,6 @@
 			isa = PBXGroup;
 			children = (
 				831062C6295BF1D5008A7BA8 /* NGTabBarController.swift */,
-				831062DB295BF439008A7BA8 /* NGPlaceListViewController.swift */,
 				831062DF295BF46E008A7BA8 /* NGPlaceDetailViewController.swift */,
 				831062DD295BF456008A7BA8 /* NGResultsListViewController.swift */,
 				836BAB7029649B5D00A3870A /* NGEventsViewController.swift */,
@@ -181,6 +180,7 @@
 				831062E3295BF4DD008A7BA8 /* NGDataHelper.swift */,
 				836BAB782964F4F100A3870A /* NGLocationHelper.swift */,
 				836BAB8B296C8AC900A3870A /* NGImageLoaderHelper.swift */,
+				831062DB295BF439008A7BA8 /* NGPlaceListViewController.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
