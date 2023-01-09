@@ -115,6 +115,8 @@ _______
 #### Ticketmaster Events API Results with Link
 <img src="https://github.com/mercybaffour/neighborhood-gems/blob/main/NeighborhoodGems/SupportingFiles/Assets.xcassets/6eventsNearby.imageset/simulator_screenshot_A851D070-BE8A-4AAC-984D-986127FDB693.png" width="300" />
 
+_____
+
 ### Discussion 
 
    #### Areas to Improve & Lessons Learned
