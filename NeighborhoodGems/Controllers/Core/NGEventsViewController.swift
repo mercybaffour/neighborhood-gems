@@ -97,17 +97,17 @@ extension NGEventsViewController {
         
     //Calling service method to fetch events based on current location
     private func loadEvents(ll: String) {
-        NGAPIService.getEvents(ll: ll) { (success, list) in
+        NGAPIService.getEvents(ll: ll) { [weak self] (success, list) in
             
             if success, let list = list {
                 NGDataHelper.shared.eventsList = list
                 
                 DispatchQueue.main.async {
-                    self.collectionView.reloadData()
+                    self?.collectionView.reloadData()
                 }
             } else {
                 // show no data alert
-                self.displayNoDataAlert(title: "We apologize...", message: "Server Error: We could not load any upcoming events.")
+                self?.displayNoDataAlert(title: "We apologize...", message: "Server Error: We could not load any upcoming events.")
             }
             
         }

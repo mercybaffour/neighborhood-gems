@@ -218,17 +218,17 @@ extension NGPlaceListViewController {
     
     ///API Call to fetch places based on current location
     private func loadData(ll: String) {
-        NGAPIService.getPlacesList(term: "Community", ll: ll) { (success, list) in
+        NGAPIService.getPlacesList(term: "Community", ll: ll) { [weak self] (success, list) in
             
             if success, let list = list {
                 NGDataHelper.shared.placesList = list
                 
                 DispatchQueue.main.async {
-                    self.collectionView.reloadData()
+                    self?.collectionView.reloadData()
                 }
             } else {
                 // show no data alert
-                self.displayNoDataAlert(title: "We apologize...", message: "Server Error: No places to display")
+                self?.displayNoDataAlert(title: "We apologize...", message: "Server Error: No places to display")
             }
             
         }
@@ -236,17 +236,17 @@ extension NGPlaceListViewController {
     
     /// API Call  to fetch place list based on user's search terms: category & city
     private func loadUserResults(term: String, city: String){
-        NGAPIService.getUserPlacesList(term: term, city: city) { (success, list) in
+        NGAPIService.getUserPlacesList(term: term, city: city) { [weak self] (success, list) in
             
             if success, let list = list {
                 NGDataHelper.shared.searchResultsList = list
                 
                 DispatchQueue.main.async {
-                    self.navigationController?.pushViewController(NGResultsListViewController(), animated: true)
+                    self?.navigationController?.pushViewController(NGResultsListViewController(), animated: true)
                 }
             } else {
                 // show no data alert
-                self.displayNoDataAlert(title: "We apologize...", message: "We have no data for your category and/or city destination search results. Please try again.")
+                self?.displayNoDataAlert(title: "We apologize...", message: "We have no data for your category and/or city destination search results. Please try again.")
             }
             
         }
@@ -254,19 +254,17 @@ extension NGPlaceListViewController {
     
     /// API Call  to fetch the tips/details for each place
     private func loadPlaceDetail(with place: NGPlace) {
-        NGAPIService.getPlaceTips(id: place.fsqId) { (success, response) in
+        NGAPIService.getPlaceTips(id: place.fsqId) { [weak self] (success, response) in
             
             if success, let response = response {
                 NGDataHelper.shared.placeTips = response
                 
                 DispatchQueue.main.async {
-                    self.navigationController?.pushViewController(NGPlaceDetailViewController(place: place, tips: NGDataHelper.shared.placeTips), animated: true)
+                    self?.navigationController?.pushViewController(NGPlaceDetailViewController(place: place, tips: NGDataHelper.shared.placeTips), animated: true)
                 }
             } else {
-                
                 // show no data alert
-                self.displayNoDataAlert(title: "We apologize...", message: "Server Error: We have no details for this place.")
-                
+                self?.displayNoDataAlert(title: "We apologize...", message: "Server Error: We have no details for this place.")
             }
         }
     }
@@ -312,7 +310,7 @@ extension NGPlaceListViewController: UICollectionViewDataSource {
         cell.populate(with: place)
         
         //Setting cell with place image from Foursquare API. If there's no associated image, a default image will be displayed in this cell
-        NGAPIService.getPlaceImage(id: place.fsqId, completion: { (success, imageData) in
+        NGImageLoaderHelper.shared.getPlaceImage(id: place.fsqId, completion: { (success, imageData) in
             if success, let imageData = imageData,
                 let photo = UIImage(data: imageData) {
                 DispatchQueue.main.async {
@@ -346,6 +344,7 @@ extension NGPlaceListViewController: UICollectionViewDelegate {
 extension NGPlaceListViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
+        //To create two columns in our grid view
         let w = collectionView.frame.size.width
         return CGSize(width: (w - 20)/2, height: 290)
     }

@@ -34,6 +34,8 @@
 		836BAB7B2966233F00A3870A /* NGAPIEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB7A2966233F00A3870A /* NGAPIEndpoints.swift */; };
 		836BAB7D2966250400A3870A /* NGAPIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB7C2966250400A3870A /* NGAPIRequest.swift */; };
 		836BAB83296A3A5400A3870A /* NGEventListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB82296A3A5400A3870A /* NGEventListCollectionViewCell.swift */; };
+		836BAB8A296C690800A3870A /* NGAPIServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB89296C690800A3870A /* NGAPIServiceError.swift */; };
+		836BAB8C296C8AC900A3870A /* NGImageLoaderHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836BAB8B296C8AC900A3870A /* NGImageLoaderHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +70,8 @@
 		836BAB7C2966250400A3870A /* NGAPIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGAPIRequest.swift; sourceTree = "<group>"; };
 		836BAB82296A3A5400A3870A /* NGEventListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGEventListCollectionViewCell.swift; sourceTree = "<group>"; };
 		836BAB88296B677100A3870A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		836BAB89296C690800A3870A /* NGAPIServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGAPIServiceError.swift; sourceTree = "<group>"; };
+		836BAB8B296C8AC900A3870A /* NGImageLoaderHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NGImageLoaderHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +133,7 @@
 				831062E1295BF4D0008A7BA8 /* NGAPIService.swift */,
 				836BAB7C2966250400A3870A /* NGAPIRequest.swift */,
 				836BAB7A2966233F00A3870A /* NGAPIEndpoints.swift */,
+				836BAB89296C690800A3870A /* NGAPIServiceError.swift */,
 			);
 			path = APIClient;
 			sourceTree = "<group>";
@@ -175,6 +180,7 @@
 			children = (
 				831062E3295BF4DD008A7BA8 /* NGDataHelper.swift */,
 				836BAB782964F4F100A3870A /* NGLocationHelper.swift */,
+				836BAB8B296C8AC900A3870A /* NGImageLoaderHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -280,11 +286,13 @@
 				836BAB6D29636FEE00A3870A /* NGPickerView.swift in Sources */,
 				8359DC7E2961E53300C6E14F /* NGPlaceTip.swift in Sources */,
 				836BAB792964F4F100A3870A /* NGLocationHelper.swift in Sources */,
+				836BAB8A296C690800A3870A /* NGAPIServiceError.swift in Sources */,
 				831062E2295BF4D0008A7BA8 /* NGAPIService.swift in Sources */,
 				836BAB752964B46A00A3870A /* NGEvent.swift in Sources */,
 				831062DC295BF439008A7BA8 /* NGPlaceListViewController.swift in Sources */,
 				836BAB83296A3A5400A3870A /* NGEventListCollectionViewCell.swift in Sources */,
 				831062F3295CD210008A7BA8 /* NGCategory.swift in Sources */,
+				836BAB8C296C8AC900A3870A /* NGImageLoaderHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

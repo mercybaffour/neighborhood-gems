@@ -12,8 +12,7 @@ class NGDataHelper {
     
     static let shared = NGDataHelper()
     
-    private init() {
-    }
+    private init() {}
     
     lazy var placesList: [NGPlace] = {
         //Placeholder Data

@@ -86,9 +86,11 @@
         * As the project enlarged, I realized that the MVC design pattern bloated the view controllers. 
             - It will be beneficial to refactor the code to implement other design patterns, such as MVVM.
         * Memory management could be improved.
-            - To make this app more performant, I will need to do additiional research on how to release memory from the various API calls.
+            - To make this app more performant, I will need to do additiional research on how to release memory from the various API calls and other situations to avoid memory leaks and retain cycles.
         * UIView Extensions
             - There's some duplication on the main view controllers with a lot of repeating UI code. 
             - It'll be useful to have more base, general UIView blueprints that can be reused across view controllers.
+        * For a better user experience, it will be useful to incorporate skeleton screens or placeholder UIs as the user waits for content to load. 
+            - Also, instead of using alerts only, I might consider using an 'empty state' call to action button when content can't be shown due to connectivity isssues or other reasons.
 
 

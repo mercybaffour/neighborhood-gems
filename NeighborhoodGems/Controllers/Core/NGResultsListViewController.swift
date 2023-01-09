@@ -94,18 +94,18 @@ extension NGResultsListViewController {
     
    /// API Call to fetch place details
     private func loadPlaceDetail(with place: NGPlace) {
-        NGAPIService.getPlaceTips(id: place.fsqId) { (success, response) in
+        NGAPIService.getPlaceTips(id: place.fsqId) { [weak self] (success, response) in
             
             if success, let response = response {
                 NGDataHelper.shared.placeTips = response
                 
                 DispatchQueue.main.async {
-                    self.navigationController?.pushViewController(NGPlaceDetailViewController(place: place, tips: NGDataHelper.shared.placeTips), animated: true)
+                    self?.navigationController?.pushViewController(NGPlaceDetailViewController(place: place, tips: NGDataHelper.shared.placeTips), animated: true)
                 }
             }
             else {
                 // show no data alert
-                self.displayNoDataAlert(title: "We apologize...", message: "We do not have any details for this place.")
+                self?.displayNoDataAlert(title: "We apologize...", message: "We do not have any details for this place.")
             }
         }
     }
@@ -175,7 +175,7 @@ extension NGResultsListViewController: UICollectionViewDataSource {
         cell.populate(with: place)
         
         //Setting cell with place image from external api, or if there's none, a default image
-        NGAPIService.getPlaceImage(id: place.fsqId, completion: { (success, imageData) in
+        NGImageLoaderHelper.shared.getPlaceImage(id: place.fsqId, completion: { (success, imageData) in
             if success, let imageData = imageData,
                 let photo = UIImage(data: imageData) {
                 DispatchQueue.main.async {
