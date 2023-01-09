@@ -66,6 +66,9 @@ class NGAPIService {
                 200 ..< 300 ~= response.statusCode,             // status code in range 2xx?
                 error == nil                                    // no error?
             else {
+                if error != nil {
+                    print("Error accessing foursquare.com: /(error)")
+                }
                 completion(false, nil)
                 return
             }
@@ -103,6 +106,9 @@ class NGAPIService {
                 200 ..< 300 ~= response.statusCode,             // status code in range 2xx?
                 error == nil                                    // no error?
             else {
+                 if error != nil {
+                    print("Error accessing foursquare.com: /(error)")
+                }
                 completion(false, nil)
                 return
             }
@@ -140,6 +146,9 @@ class NGAPIService {
                 200 ..< 300 ~= response.statusCode,             // status code in range 2xx?
                 error == nil                                    // no error?
             else {
+                if error != nil {
+                    print("Error accessing foursquare.com: /(error)")
+                }
                 completion(false, nil)
                 return
             }
@@ -172,6 +181,9 @@ class NGAPIService {
                 200 ..< 300 ~= response.statusCode,             // status code in range 2xx?
                 error == nil                                    // no error?
             else {
+                if error != nil {
+                    print("Error accessing image from foursquare.com: /(error)")
+                }
                 completion(false, nil)
                 return
             }
@@ -259,6 +271,9 @@ class NGAPIService {
                 200 ..< 300 ~= response.statusCode,             // status code in range 2xx?
                 error == nil                                    // no error?
             else {
+                 if error != nil {
+                    print("Error accessing ticketmaster.com: /(error)")
+                }
                 completion(false, nil)
                 return
             }
