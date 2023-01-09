@@ -73,7 +73,20 @@
         * The app's core controllers receive place and events data and handles communication between our models and views.
 
 ### UI
-![Homepage](https://github.com/mercybaffour/neighborhood-gems/blob/main/NeighborhoodGems/SupportingFiles/Assets.xcassets/1homepage.imageset/simulator_screenshot_4B7D6ADA-9EBE-458A-AF11-EDF2E680F1BA.png?raw=true)
+
+#### Homepage
+![Homepage](https://github.com/mercybaffour/neighborhood-gems/blob/main/NeighborhoodGems/SupportingFiles/Assets.xcassets/1homepage.imageset/simulator_screenshot_4B7D6ADA-9EBE-458A-AF11-EDF2E680F1BA.png)
+
+#### Category Search Field with Dropdown
+
+#### City Search Field with Dropdown
+
+#### Foursquare API Results w/ Top Neighborhood
+
+#### Place Detail with Map & Points of Interest Switch
+
+#### Ticketmaster Events API Results with Link
+
 
 ### Discussion 
 
