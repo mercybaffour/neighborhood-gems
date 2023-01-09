@@ -68,8 +68,27 @@
         * The app's Models folder stores all our data models. These models all conform to Decodable to simplify parsing from JSON responses.
         * The app's Views folder stores all our base view components.
         * The helper controllers include two classes: 1) NGDataHelper, and 2) NGLocationHelper
-            * NGDataHelper serves the purpose of storing and providing the app's data to the UI when needed.
+            * NGDataHelper serves the purpose of centralizing, storing, and providing the app's data to the UI when needed.
             * NGLocationHelper serves the purpose of managing the user's current location, location updates, and authorization changes.
         * The app's core controllers receive place and events data and handles communication between our models and views.
+
+### UI
+
+
+### Discussion 
+
+    * Areas to Improve & Lessons Learned
+        * With more time, it will be useful to use a generic type for the type of data object we expect to get back from the API calls. 
+            - This will hopefully reduce duplication in the NGAPIService call functions.
+        * Error handling should probably be handled more gracefully. 
+            - The app currently handles errors from the API calls by printing errors to the console and presenting relevant modals to the user. 
+            - Additional logging will be useful.
+        * As the project enlarged, I realized that the MVC design pattern bloated the view controllers. 
+            - It will be beneficial to refactor the code to implement other design patterns, such as MVVM.
+        * Memory management could be improved.
+            - To make this app more performant, I will need to do additiional research on how to release memory from the various API calls.
+        * UIView Extensions
+            - There's some duplication on the main view controllers with a lot of repeating UI code. 
+            - It'll be useful to have more base, general UIView blueprints that can be reused across view controllers.
 
 
