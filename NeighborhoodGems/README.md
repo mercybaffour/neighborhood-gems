@@ -73,7 +73,7 @@
         * The app's core controllers receive place and events data and handles communication between our models and views.
 
 ### UI
-
+![Homepage](https://github.com/mercybaffour/neighborhood-gems/blob/main/NeighborhoodGems/SupportingFiles/Assets.xcassets/1homepage.imageset/simulator_screenshot_4B7D6ADA-9EBE-458A-AF11-EDF2E680F1BA.png?raw=true)
 
 ### Discussion 
 
